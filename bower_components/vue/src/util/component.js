@@ -1,10 +1,11 @@
 import { warn } from './debug'
 import { resolveAsset } from './options'
 import { getAttr, getBindAttr } from './dom'
-import { isArray, isPlainObject } from './lang'
+import { isArray, isPlainObject, isObject, hasOwn } from './lang'
+import { defineReactive } from '../observer/index'
 
-export const commonTagRE = /^(div|p|span|img|a|b|i|br|ul|ol|li|h1|h2|h3|h4|h5|h6|code|pre|table|th|td|tr|form|label|input|select|option|nav|article|section|header|footer)$/
-export const reservedTagRE = /^(slot|partial|component)$/
+export const commonTagRE = /^(div|p|span|img|a|b|i|br|ul|ol|li|h1|h2|h3|h4|h5|h6|code|pre|table|th|td|tr|form|label|input|select|option|nav|article|section|header|footer)$/i
+export const reservedTagRE = /^(slot|partial|component)$/i
 
 let isUnknownElement
 if (process.env.NODE_ENV !== 'production') {
@@ -100,9 +101,43 @@ function getIsBinding (el) {
 export function initProp (vm, prop, value) {
   const key = prop.path
   value = coerceProp(prop, value)
-  vm[key] = vm._data[key] = assertProp(prop, value)
-    ? value
-    : undefined
+  if (value === undefined) {
+    value = getPropDefaultValue(vm, prop.options)
+  }
+  if (assertProp(prop, value)) {
+    defineReactive(vm, key, value, true /* doNotObserve */)
+  }
+}
+
+/**
+ * Get the default value of a prop.
+ *
+ * @param {Vue} vm
+ * @param {Object} options
+ * @return {*}
+ */
+
+function getPropDefaultValue (vm, options) {
+  // no default, return undefined
+  if (!hasOwn(options, 'default')) {
+    // absent boolean value defaults to false
+    return options.type === Boolean
+      ? false
+      : undefined
+  }
+  var def = options.default
+  // warn against non-factory defaults for Object & Array
+  if (isObject(def)) {
+    process.env.NODE_ENV !== 'production' && warn(
+      'Object/Array as default prop values will be shared ' +
+      'across multiple instances. Use a factory function ' +
+      'to return the default value instead.'
+    )
+  }
+  // call factory function for non-Function types
+  return typeof def === 'function' && options.type !== Function
+    ? def.call(vm)
+    : def
 }
 
 /**
