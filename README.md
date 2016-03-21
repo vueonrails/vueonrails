@@ -2,7 +2,7 @@
 
 Vuejs ships with the latest [Vue.js + router + resource](http://vuejs.org/) and integrate with Rails' asset pipeline.
 
-The current version is Vue.js (v0.7.11) + vue-router (v1.0.17) + vue-resource (0.7.0)
+The current version is Vue.js (v0.7.11) + vue-router (v1.0.18) + vue-resource (0.7.0)
 
 > Reactive Components for Modern Web Interfaces
 
@@ -29,8 +29,8 @@ Or install it yourself as:
 //= require jquery_ujs
 //= require turbolinks
 //= require vue
-//= require vue-router #(optional)
-//= require vue-resource #(optional)
+//= require vue-router
+//= require vue-resource 
 //= require_tree .
 ```
 
