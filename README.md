@@ -1,8 +1,8 @@
 # Vuejs
 
-Vuejs ships with the latest [Vue.js + router + resource](http://vuejs.org/) and integrate with Rails' asset pipeline.
+Vuejs ships with the latest [Vue.js + router + resource](http://vuejs.org/) and integrate with Rails' asset pipeline. Vue.js is created by Evan You.
 
-The current version is Vue.js (v0.7.11) + vue-router (v1.0.18) + vue-resource (0.7.0)
+The current version is Vue.js (v0.7.11) + vue-router (v1.0.20) + vue-resource (0.7.0)
 
 > Reactive Components for Modern Web Interfaces
 
@@ -30,7 +30,7 @@ Or install it yourself as:
 //= require turbolinks
 //= require vue
 //= require vue-router
-//= require vue-resource 
+//= require vue-resource
 //= require_tree .
 ```
 

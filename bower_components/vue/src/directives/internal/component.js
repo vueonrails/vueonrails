@@ -114,16 +114,21 @@ export default {
   /**
    * Resolve the component constructor to use when creating
    * the child vm.
+   *
+   * @param {String|Function} value
+   * @param {Function} cb
    */
 
-  resolveComponent (id, cb) {
+  resolveComponent (value, cb) {
     var self = this
     this.pendingComponentCb = cancellable(function (Component) {
-      self.ComponentName = Component.options.name || id
+      self.ComponentName =
+        Component.options.name ||
+        (typeof value === 'string' ? value : null)
       self.Component = Component
       cb()
     })
-    this.vm._resolveComponent(id, this.pendingComponentCb)
+    this.vm._resolveComponent(value, this.pendingComponentCb)
   },
 
   /**
@@ -260,7 +265,9 @@ export default {
 
   unbuild (defer) {
     if (this.waitingFor) {
-      this.waitingFor.$destroy()
+      if (!this.keepAlive) {
+        this.waitingFor.$destroy()
+      }
       this.waitingFor = null
     }
     var child = this.childVM
