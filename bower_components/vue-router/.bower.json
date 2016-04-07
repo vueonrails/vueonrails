@@ -26,15 +26,14 @@
     "*.yml",
     "*.json"
   ],
-  "version": "0.7.11",
-  "_release": "0.7.11",
+  "version": "0.7.12",
+  "_release": "0.7.12",
   "_resolution": {
     "type": "version",
-    "tag": "v0.7.11",
-    "commit": "828f1abea98efcfe19702f165d48377db139047b"
+    "tag": "v0.7.12",
+    "commit": "ba632a81e9609f32f24838b43b939731d87c872a"
   },
   "_source": "git://github.com/vuejs/vue-router.git",
   "_target": "~0.7.11",
-  "_originalSource": "vue-router",
-  "_direct": true
+  "_originalSource": "vue-router"
 }
