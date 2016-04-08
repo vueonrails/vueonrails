@@ -1,6 +1,7 @@
 import config from '../config'
 import { parseDirective } from '../parsers/directive'
-import { defineReactive } from '../observer/index'
+import { isSimplePath } from '../parsers/expression'
+import { defineReactive, withoutConversion } from '../observer/index'
 import propDef from '../directives/internal/prop'
 import {
   warn,
@@ -31,10 +32,11 @@ const settablePathRE = /^[A-Za-z_$][\w$]*(\.[A-Za-z_$][\w$]*|\[[^\[\]]+\])*$/
  *
  * @param {Element|DocumentFragment} el
  * @param {Array} propOptions
+ * @param {Vue} vm
  * @return {Function} propsLinkFn
  */
 
-export function compileProps (el, propOptions) {
+export function compileProps (el, propOptions, vm) {
   var props = []
   var names = Object.keys(propOptions)
   var i = names.length
@@ -44,7 +46,7 @@ export function compileProps (el, propOptions) {
     options = propOptions[name] || empty
 
     if (process.env.NODE_ENV !== 'production' && name === '$data') {
-      warn('Do not use $data as prop.')
+      warn('Do not use $data as prop.', vm)
       continue
     }
 
@@ -55,7 +57,8 @@ export function compileProps (el, propOptions) {
     if (!identRE.test(path)) {
       process.env.NODE_ENV !== 'production' && warn(
         'Invalid prop key: "' + name + '". Prop keys ' +
-        'must be valid identifiers.'
+        'must be valid identifiers.',
+        vm
       )
       continue
     }
@@ -98,7 +101,8 @@ export function compileProps (el, propOptions) {
           prop.mode = propBindingModes.ONE_WAY
           warn(
             'Cannot bind two-way prop with non-settable ' +
-            'parent path: ' + value
+            'parent path: ' + value,
+            vm
           )
         }
       }
@@ -111,7 +115,8 @@ export function compileProps (el, propOptions) {
         prop.mode !== propBindingModes.TWO_WAY
       ) {
         warn(
-          'Prop "' + name + '" expects a two-way binding type.'
+          'Prop "' + name + '" expects a two-way binding type.',
+          vm
         )
       }
     } else if ((value = getAttr(el, attr)) !== null) {
@@ -133,11 +138,12 @@ export function compileProps (el, propOptions) {
         warn(
           'Possible usage error for prop `' + lowerCaseName + '` - ' +
           'did you mean `' + attr + '`? HTML is case-insensitive, remember to use ' +
-          'kebab-case for props in templates.'
+          'kebab-case for props in templates.',
+          vm
         )
       } else if (options.required) {
         // warn missing required
-        warn('Missing required prop: ' + name)
+        warn('Missing required prop: ' + name, vm)
       }
     }
     // push prop
@@ -211,6 +217,37 @@ function makePropsLinkFn (props) {
 }
 
 /**
+ * Process a prop with a rawValue, applying necessary coersions,
+ * default values & assertions and call the given callback with
+ * processed value.
+ *
+ * @param {Vue} vm
+ * @param {Object} prop
+ * @param {*} rawValue
+ * @param {Function} fn
+ */
+
+function processPropValue (vm, prop, rawValue, fn) {
+  const isSimple = prop.dynamic && isSimplePath(prop.parentPath)
+  let value = rawValue
+  if (value === undefined) {
+    value = getPropDefaultValue(vm, prop)
+  }
+  value = coerceProp(prop, value)
+  const coerced = value !== rawValue
+  if (!assertProp(prop, value, vm)) {
+    value = undefined
+  }
+  if (isSimple && !coerced) {
+    withoutConversion(() => {
+      fn(value)
+    })
+  } else {
+    fn(value)
+  }
+}
+
+/**
  * Set a prop's initial value on a vm and its data object.
  *
  * @param {Vue} vm
@@ -219,26 +256,36 @@ function makePropsLinkFn (props) {
  */
 
 export function initProp (vm, prop, value) {
-  const key = prop.path
-  value = coerceProp(prop, value)
-  if (value === undefined) {
-    value = getPropDefaultValue(vm, prop.options)
-  }
-  if (assertProp(prop, value)) {
-    defineReactive(vm, key, value)
-  }
+  processPropValue(vm, prop, value, value => {
+    defineReactive(vm, prop.path, value)
+  })
+}
+
+/**
+ * Update a prop's value on a vm.
+ *
+ * @param {Vue} vm
+ * @param {Object} prop
+ * @param {*} value
+ */
+
+export function updateProp (vm, prop, value) {
+  processPropValue(vm, prop, value, value => {
+    vm[prop.path] = value
+  })
 }
 
 /**
  * Get the default value of a prop.
  *
  * @param {Vue} vm
- * @param {Object} options
+ * @param {Object} prop
  * @return {*}
  */
 
-function getPropDefaultValue (vm, options) {
+function getPropDefaultValue (vm, prop) {
   // no default, return undefined
+  const options = prop.options
   if (!hasOwn(options, 'default')) {
     // absent boolean value defaults to false
     return options.type === Boolean
@@ -249,9 +296,10 @@ function getPropDefaultValue (vm, options) {
   // warn against non-factory defaults for Object & Array
   if (isObject(def)) {
     process.env.NODE_ENV !== 'production' && warn(
-      'Object/Array as default prop values will be shared ' +
-      'across multiple instances. Use a factory function ' +
-      'to return the default value instead.'
+      'Invalid default value for prop "' + prop.name + '": ' +
+      'Props with type Object/Array must use a factory function ' +
+      'to return the default value.',
+      vm
     )
   }
   // call factory function for non-Function types
@@ -265,9 +313,10 @@ function getPropDefaultValue (vm, options) {
  *
  * @param {Object} prop
  * @param {*} value
+ * @param {Vue} vm
  */
 
-export function assertProp (prop, value) {
+function assertProp (prop, value, vm) {
   if (
     !prop.options.required && ( // non-required
       prop.raw === null ||      // abscent
@@ -278,46 +327,35 @@ export function assertProp (prop, value) {
   }
   var options = prop.options
   var type = options.type
-  var valid = true
-  var expectedType
+  var valid = !type
+  var expectedTypes = []
   if (type) {
-    if (type === String) {
-      expectedType = 'string'
-      valid = typeof value === expectedType
-    } else if (type === Number) {
-      expectedType = 'number'
-      valid = typeof value === 'number'
-    } else if (type === Boolean) {
-      expectedType = 'boolean'
-      valid = typeof value === 'boolean'
-    } else if (type === Function) {
-      expectedType = 'function'
-      valid = typeof value === 'function'
-    } else if (type === Object) {
-      expectedType = 'object'
-      valid = isPlainObject(value)
-    } else if (type === Array) {
-      expectedType = 'array'
-      valid = isArray(value)
-    } else {
-      valid = value instanceof type
+    if (!isArray(type)) {
+      type = [ type ]
+    }
+    for (var i = 0; i < type.length && !valid; i++) {
+      var assertedType = assertType(value, type[i])
+      expectedTypes.push(assertedType.expectedType)
+      valid = assertedType.valid
     }
   }
   if (!valid) {
-    process.env.NODE_ENV !== 'production' && warn(
-      'Invalid prop: type check failed for ' +
-      prop.path + '="' + prop.raw + '".' +
-      ' Expected ' + formatType(expectedType) +
-      ', got ' + formatValue(value) + '.'
-    )
+    if (process.env.NODE_ENV !== 'production') {
+      warn(
+        'Invalid prop: type check failed for prop "' + prop.name + '".' +
+        ' Expected ' + expectedTypes.map(formatType).join(', ') +
+        ', got ' + formatValue(value) + '.',
+        vm
+      )
+    }
     return false
   }
   var validator = options.validator
   if (validator) {
     if (!validator(value)) {
       process.env.NODE_ENV !== 'production' && warn(
-        'Invalid prop: custom validator check failed for ' +
-        prop.path + '="' + prop.raw + '"'
+        'Invalid prop: custom validator check failed for prop "' + prop.name + '".',
+        vm
       )
       return false
     }
@@ -333,7 +371,7 @@ export function assertProp (prop, value) {
  * @return {*}
  */
 
-export function coerceProp (prop, value) {
+function coerceProp (prop, value) {
   var coerce = prop.options.coerce
   if (!coerce) {
     return value
@@ -342,11 +380,63 @@ export function coerceProp (prop, value) {
   return coerce(value)
 }
 
-function formatType (val) {
-  return val
-    ? val.charAt(0).toUpperCase() + val.slice(1)
+/**
+ * Assert the type of a value
+ *
+ * @param {*} value
+ * @param {Function} type
+ * @return {Object}
+ */
+
+function assertType (value, type) {
+  var valid
+  var expectedType
+  if (type === String) {
+    expectedType = 'string'
+    valid = typeof value === expectedType
+  } else if (type === Number) {
+    expectedType = 'number'
+    valid = typeof value === expectedType
+  } else if (type === Boolean) {
+    expectedType = 'boolean'
+    valid = typeof value === expectedType
+  } else if (type === Function) {
+    expectedType = 'function'
+    valid = typeof value === expectedType
+  } else if (type === Object) {
+    expectedType = 'object'
+    valid = isPlainObject(value)
+  } else if (type === Array) {
+    expectedType = 'array'
+    valid = isArray(value)
+  } else {
+    valid = value instanceof type
+  }
+  return {
+    valid,
+    expectedType
+  }
+}
+
+/**
+ * Format type for output
+ *
+ * @param {String} type
+ * @return {String}
+ */
+
+function formatType (type) {
+  return type
+    ? type.charAt(0).toUpperCase() + type.slice(1)
     : 'custom type'
 }
+
+/**
+ * Format value
+ *
+ * @param {*} value
+ * @return {String}
+ */
 
 function formatValue (val) {
   return Object.prototype.toString.call(val).slice(8, -1)

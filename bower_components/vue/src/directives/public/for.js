@@ -1,6 +1,7 @@
 import FragmentFactory from '../../fragment/factory'
 import { FOR } from '../priorities'
 import { withoutConversion } from '../../observer/index'
+import { getPath } from '../../parsers/path'
 import {
   isObject,
   warn,
@@ -48,7 +49,9 @@ const vFor = {
 
     if (!this.alias) {
       process.env.NODE_ENV !== 'production' && warn(
-        'Alias is required in v-for.'
+        'Invalid v-for expression "' + this.descriptor.raw + '": ' +
+        'alias is required.',
+        this.vm
       )
       return
     }
@@ -403,7 +406,7 @@ const vFor = {
       id = trackByKey
         ? trackByKey === '$index'
           ? index
-          : value[trackByKey]
+          : getPath(value, trackByKey)
         : (key || value)
       if (!cache[id]) {
         cache[id] = frag
@@ -444,7 +447,7 @@ const vFor = {
       var id = trackByKey
         ? trackByKey === '$index'
           ? index
-          : value[trackByKey]
+          : getPath(value, trackByKey)
         : (key || value)
       frag = this.cache[id]
     } else {
@@ -476,7 +479,7 @@ const vFor = {
       var id = trackByKey
         ? trackByKey === '$index'
           ? index
-          : value[trackByKey]
+          : getPath(value, trackByKey)
         : (key || value)
       this.cache[id] = null
     } else {
@@ -637,7 +640,8 @@ if (process.env.NODE_ENV !== 'production') {
     warn(
       'Duplicate value found in v-for="' + this.descriptor.raw + '": ' +
       JSON.stringify(value) + '. Use track-by="$index" if ' +
-      'you are expecting duplicate values.'
+      'you are expecting duplicate values.',
+      this.vm
     )
   }
 }
