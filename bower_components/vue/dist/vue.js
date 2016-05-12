@@ -1,5 +1,5 @@
 /*!
- * Vue.js v1.0.22
+ * Vue.js v1.0.24
  * (c) 2016 Evan You
  * Released under the MIT License.
  */
@@ -1140,8 +1140,9 @@ var transition = Object.freeze({
    */
 
   function inDoc(node) {
-    var doc = document.documentElement;
-    var parent = node && node.parentNode;
+    if (!node) return false;
+    var doc = node.ownerDocument.documentElement;
+    var parent = node.parentNode;
     return doc === node || doc === parent || !!(parent && parent.nodeType === 1 && doc.contains(parent));
   }
 
@@ -3015,19 +3016,26 @@ var expression = Object.freeze({
    */
 
   function flushBatcherQueue() {
-    runBatcherQueue(queue);
-    queue.length = 0;
-    runBatcherQueue(userQueue);
-    // user watchers triggered more internal watchers
-    if (queue.length) {
+    var _again = true;
+
+    _function: while (_again) {
+      _again = false;
+
       runBatcherQueue(queue);
+      runBatcherQueue(userQueue);
+      // user watchers triggered more watchers,
+      // keep flushing until it depletes
+      if (queue.length) {
+        _again = true;
+        continue _function;
+      }
+      // dev tool hook
+      /* istanbul ignore if */
+      if (devtools && config.devtools) {
+        devtools.emit('flush');
+      }
+      resetBatcherState();
     }
-    // dev tool hook
-    /* istanbul ignore if */
-    if (devtools && config.devtools) {
-      devtools.emit('flush');
-    }
-    resetBatcherState();
   }
 
   /**
@@ -3053,6 +3061,7 @@ var expression = Object.freeze({
         }
       }
     }
+    queue.length = 0;
   }
 
   /**
@@ -7765,7 +7774,7 @@ var template = Object.freeze({
       var node = nodes[i];
       if (isTemplate(node) && !node.hasAttribute('v-if') && !node.hasAttribute('v-for')) {
         parent.removeChild(node);
-        node = parseTemplate(node);
+        node = parseTemplate(node, true);
       }
       frag.appendChild(node);
     }
@@ -10001,7 +10010,7 @@ var template = Object.freeze({
 
   installGlobalAPI(Vue);
 
-  Vue.version = '1.0.22';
+  Vue.version = '1.0.24';
 
   // devtools global hook
   /* istanbul ignore next */
