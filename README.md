@@ -2,7 +2,7 @@
 
 Vuejs ships with the latest [Vue.js + router + resource](http://vuejs.org/) and integrate with Rails' asset pipeline. Vue.js is created by Evan You.
 
-The current version is Vue.js (v1.0.25) + vue-router (v0.7.13) + vue-resource (v0.7.4)
+The current version is Vue.js (v1.0.26) + vue-router (v0.7.13) + vue-resource (v0.7.4)
 
 > Reactive Components for Modern Web Interfaces
 
