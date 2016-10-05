@@ -34,6 +34,15 @@ const vFor = {
   ],
 
   bind () {
+    if (process.env.NODE_ENV !== 'production' && this.el.hasAttribute('v-if')) {
+      warn(
+        `<${this.el.tagName.toLowerCase()} v-for="${this.expression}" v-if="${this.el.getAttribute('v-if')}">: ` +
+        `Using v-if and v-for on the same element is not recommended - ` +
+        `consider filtering the source Array instead.`,
+        this.vm
+      )
+    }
+
     // support "item in/of items" syntax
     var inMatch = this.expression.match(/(.*) (?:in|of) (.*)/)
     if (inMatch) {
@@ -151,7 +160,7 @@ const vFor = {
             frag.scope[alias] = value
           })
         }
-      } else { // new isntance
+      } else { // new instance
         frag = this.create(value, alias, i, key)
         frag.fresh = !init
       }
@@ -603,24 +612,6 @@ function findPrevFrag (frag, anchor, id) {
 }
 
 /**
- * Find a vm from a fragment.
- *
- * @param {Fragment} frag
- * @return {Vue|undefined}
- */
-
-function findVmFromFrag (frag) {
-  let node = frag.node
-  // handle multi-node frag
-  if (frag.end) {
-    while (!node.__vue__ && node !== frag.end && node.nextSibling) {
-      node = node.nextSibling
-    }
-  }
-  return node.__vue__
-}
-
-/**
  * Create a range array from given number.
  *
  * @param {Number} n
@@ -664,6 +655,24 @@ if (process.env.NODE_ENV !== 'production') {
       this.vm
     )
   }
+}
+
+/**
+ * Find a vm from a fragment.
+ *
+ * @param {Fragment} frag
+ * @return {Vue|undefined}
+ */
+
+function findVmFromFrag (frag) {
+  let node = frag.node
+  // handle multi-node frag
+  if (frag.end) {
+    while (!node.__vue__ && node !== frag.end && node.nextSibling) {
+      node = node.nextSibling
+    }
+  }
+  return node.__vue__
 }
 
 export default vFor
