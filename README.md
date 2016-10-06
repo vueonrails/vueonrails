@@ -26,6 +26,8 @@ Or install it yourself as:
 
 ## Usage
 
+For 1.x
+
 ```
 //= require jquery
 //= require jquery_ujs
