@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.version       = Vuejs::VERSION
   spec.authors       = ["Bryan Lim"]
   spec.email         = ["ytbryan@gmail.com"]
-  spec.summary       = %q{Latest Vue.js + latest router + resource for rails 3.x & 4.x}
-  spec.description   = %q{Latest Vue.js + latest router + resource for rails 3.x & 4.x}
+  spec.summary       = %q{Latest Vue.js + latest router + resource for Rails - ship with Vue 2.x}
+  spec.description   = %q{Latest Vue.js + latest router + resource for Rails - ship with Vue 2.x}
   spec.homepage      = "http://github.com/ytbryan/vuejs"
   spec.license       = "MIT"
   spec.post_install_message = Log::MESSAGE
