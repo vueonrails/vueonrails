@@ -4,62 +4,68 @@
 
 import Promise from '../../promise';
 import xhrClient from './xhr';
-import { each, trim, isArray, isString, toLower } from '../../util';
+import { warn, when, isObject, isFunction } from '../../util';
 
-export default function (request) {
+export default function (context) {
 
-    var response = (request.client || xhrClient)(request);
+    var reqHandlers = [sendRequest], resHandlers = [], handler;
 
-    return Promise.resolve(response).then((response) => {
-
-        if (response.headers) {
-
-            var headers = parseHeaders(response.headers);
-
-            response.headers = (name) => {
-
-                if (name) {
-                    return headers[toLower(name)];
-                }
-
-                return headers;
-            };
-
-        }
-
-        response.ok = response.status >= 200 && response.status < 300;
-
-        return response;
-    });
-
-}
-
-function parseHeaders(str) {
-
-    var headers = {}, value, name, i;
-
-    if (isString(str)) {
-        each(str.split('\n'), (row) => {
-
-            i = row.indexOf(':');
-            name = trim(toLower(row.slice(0, i)));
-            value = trim(row.slice(i + 1));
-
-            if (headers[name]) {
-
-                if (isArray(headers[name])) {
-                    headers[name].push(value);
-                } else {
-                    headers[name] = [headers[name], value];
-                }
-
-            } else {
-
-                headers[name] = value;
-            }
-
-        });
+    if (!isObject(context)) {
+        context = null;
     }
 
-    return headers;
+    function Client(request) {
+        return new Promise((resolve) => {
+
+            function exec() {
+
+                handler = reqHandlers.pop();
+
+                if (isFunction(handler)) {
+                    handler.call(context, request, next);
+                } else {
+                    warn(`Invalid interceptor of type ${typeof handler}, must be a function`);
+                    next();
+                }
+            }
+
+            function next(response) {
+
+                if (isFunction(response)) {
+
+                    resHandlers.unshift(response);
+
+                } else if (isObject(response)) {
+
+                    resHandlers.forEach((handler) => {
+                        response = when(response, (response) => {
+                            return handler.call(context, response) || response;
+                        });
+                    });
+
+                    when(response, resolve);
+
+                    return;
+                }
+
+                exec();
+            }
+
+            exec();
+
+        }, context);
+    }
+
+    Client.use = (handler) => {
+        reqHandlers.push(handler);
+    };
+
+    return Client;
+}
+
+function sendRequest(request, resolve) {
+
+    var client = request.client || xhrClient;
+
+    resolve(client(request));
 }

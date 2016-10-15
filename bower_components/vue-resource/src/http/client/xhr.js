@@ -2,50 +2,55 @@
  * XMLHttp client.
  */
 
-import Url from '../../url/index';
 import Promise from '../../promise';
-import { each, extend, trim, isPlainObject } from '../../util';
+import { each, trim } from '../../util';
 
 export default function (request) {
     return new Promise((resolve) => {
 
-        var xhr = new XMLHttpRequest(), response = {request: request}, handler;
+        var xhr = new XMLHttpRequest(), handler = (event) => {
 
-        request.cancel = () => {
-            xhr.abort();
-        };
+            var response = request.respondWith(
+                'response' in xhr ? xhr.response : xhr.responseText, {
+                    status: xhr.status === 1223 ? 204 : xhr.status, // IE9 status bug
+                    statusText: xhr.status === 1223 ? 'No Content' : trim(xhr.statusText)
+                }
+            );
 
-        xhr.open(request.method, Url(request), true);
-
-        handler = (event) => {
-
-            response.data = ('response' in xhr) ? xhr.response : xhr.responseText;
-            response.status = xhr.status === 1223 ? 204 : xhr.status; // IE9 status bug
-            response.statusText = trim(xhr.statusText || '');
-            response.headers = xhr.getAllResponseHeaders();
+            each(trim(xhr.getAllResponseHeaders()).split('\n'), (row) => {
+                response.headers.append(row.slice(0, row.indexOf(':')), row.slice(row.indexOf(':') + 1));
+            });
 
             resolve(response);
         };
 
-        xhr.timeout = 0;
-        xhr.onload = handler;
-        xhr.onabort = handler;
-        xhr.onerror = handler;
-        xhr.ontimeout = () => {};
-        xhr.onprogress = () => {};
+        request.abort = () => xhr.abort();
 
-        if (isPlainObject(request.xhr)) {
-            extend(xhr, request.xhr);
+        if (request.progress) {
+            if (request.method === 'GET') {
+                xhr.addEventListener('progress', request.progress);
+            } else if (/^(POST|PUT)$/i.test(request.method)) {
+                xhr.upload.addEventListener('progress', request.progress);
+            }
         }
 
-        if (isPlainObject(request.upload)) {
-            extend(xhr.upload, request.upload);
+        xhr.open(request.method, request.getUrl(), true);
+
+        if ('responseType' in xhr) {
+            xhr.responseType = 'blob';
         }
 
-        each(request.headers || {}, (value, header) => {
-            xhr.setRequestHeader(header, value);
+        if (request.credentials === true) {
+            xhr.withCredentials = true;
+        }
+
+        request.headers.forEach((value, name) => {
+            xhr.setRequestHeader(name, value);
         });
 
-        xhr.send(request.data);
+        xhr.timeout = 0;
+        xhr.onload = handler;
+        xhr.onerror = handler;
+        xhr.send(request.getBody());
     });
 }

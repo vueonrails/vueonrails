@@ -2,23 +2,23 @@
  * Utility functions.
  */
 
-var util = {}, config = {}, array = [], console = window.console;
+import Promise from './promise';
+
+var debug = false, util = {}, { slice } = [];
 
 export default function (Vue) {
     util = Vue.util;
-    config = Vue.config;
+    debug = Vue.config.debug || !Vue.config.silent;
 }
 
-export const isArray = Array.isArray;
-
 export function warn(msg) {
-    if (console && util.warn && (!config.silent || config.debug)) {
+    if (typeof console !== 'undefined' && debug) {
         console.warn('[VueResource warn]: ' + msg);
     }
 }
 
 export function error(msg) {
-    if (console) {
+    if (typeof console !== 'undefined') {
         console.error(msg);
     }
 }
@@ -35,8 +35,18 @@ export function toLower(str) {
     return str ? str.toLowerCase() : '';
 }
 
+export function toUpper(str) {
+    return str ? str.toUpperCase() : '';
+}
+
+export const isArray = Array.isArray;
+
 export function isString(val) {
     return typeof val === 'string';
+}
+
+export function isBoolean(val) {
+    return val === true || val === false;
 }
 
 export function isFunction(val) {
@@ -49,6 +59,25 @@ export function isObject(obj) {
 
 export function isPlainObject(obj) {
     return isObject(obj) && Object.getPrototypeOf(obj) == Object.prototype;
+}
+
+export function isBlob(obj) {
+    return typeof Blob !== 'undefined' && obj instanceof Blob;
+}
+
+export function isFormData(obj) {
+    return typeof FormData !== 'undefined' && obj instanceof FormData;
+}
+
+export function when(value, fulfilled, rejected) {
+
+    var promise = Promise.resolve(value);
+
+    if (arguments.length < 2) {
+        return promise;
+    }
+
+    return promise.then(fulfilled, rejected);
 }
 
 export function options(fn, obj, opts) {
@@ -66,7 +95,7 @@ export function each(obj, iterator) {
 
     var i, key;
 
-    if (typeof obj.length == 'number') {
+    if (obj && typeof obj.length == 'number') {
         for (i = 0; i < obj.length; i++) {
             iterator.call(obj[i], obj[i], i);
         }
@@ -81,34 +110,42 @@ export function each(obj, iterator) {
     return obj;
 }
 
-export function defaults(target, source) {
+export const assign = Object.assign || _assign;
 
-    for (var key in source) {
-        if (target[key] === undefined) {
-            target[key] = source[key];
-        }
-    }
+export function merge(target) {
 
-    return target;
-}
+    var args = slice.call(arguments, 1);
 
-export function extend(target) {
-
-    var args = array.slice.call(arguments, 1);
-
-    args.forEach((arg) => {
-        _merge(target, arg);
+    args.forEach((source) => {
+        _merge(target, source, true);
     });
 
     return target;
 }
 
-export function merge(target) {
+export function defaults(target) {
 
-    var args = array.slice.call(arguments, 1);
+    var args = slice.call(arguments, 1);
 
-    args.forEach((arg) => {
-        _merge(target, arg, true);
+    args.forEach((source) => {
+
+        for (var key in source) {
+            if (target[key] === undefined) {
+                target[key] = source[key];
+            }
+        }
+
+    });
+
+    return target;
+}
+
+function _assign(target) {
+
+    var args = slice.call(arguments, 1);
+
+    args.forEach((source) => {
+        _merge(target, source);
     });
 
     return target;

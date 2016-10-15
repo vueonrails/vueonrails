@@ -2,36 +2,32 @@
  * XDomain client (Internet Explorer).
  */
 
-import Url from '../../url/index';
 import Promise from '../../promise';
 
 export default function (request) {
     return new Promise((resolve) => {
 
-        var xdr = new XDomainRequest(), response = {request: request}, handler;
+        var xdr = new XDomainRequest(), handler = ({type}) => {
 
-        request.cancel = () => {
-            xdr.abort();
+            var status = 0;
+
+            if (type === 'load') {
+                status = 200;
+            } else if (type === 'error') {
+                status = 500;
+            }
+
+            resolve(request.respondWith(xdr.responseText, {status}));
         };
 
-        xdr.open(request.method, Url(request), true);
+        request.abort = () => xdr.abort();
 
-        handler = (event) => {
-
-            response.data = xdr.responseText;
-            response.status = xdr.status;
-            response.statusText = xdr.statusText || '';
-
-            resolve(response);
-        };
-
+        xdr.open(request.method, request.getUrl());
         xdr.timeout = 0;
         xdr.onload = handler;
-        xdr.onabort = handler;
         xdr.onerror = handler;
-        xdr.ontimeout = () => {};
+        xdr.ontimeout = handler;
         xdr.onprogress = () => {};
-
-        xdr.send(request.data);
+        xdr.send(request.getBody());
     });
 }

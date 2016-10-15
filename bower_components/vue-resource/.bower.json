@@ -1,23 +1,30 @@
 {
   "name": "vue-resource",
   "main": "dist/vue-resource.js",
-  "description": "A web request service for Vue.js",
-  "version": "0.7.4",
+  "version": "1.0.3",
+  "description": "The HTTP client for Vue.js",
   "homepage": "https://github.com/vuejs/vue-resource",
   "license": "MIT",
+  "keywords": [
+    "vue",
+    "xhr",
+    "http",
+    "ajax"
+  ],
   "ignore": [
     ".*",
     "build",
     "docs",
     "package.json"
   ],
-  "_release": "0.7.4",
+  "_release": "1.0.3",
   "_resolution": {
     "type": "version",
-    "tag": "0.7.4",
-    "commit": "f430f31834654694c0ff672ababedaebf71a5b14"
+    "tag": "1.0.3",
+    "commit": "46f01aa55edef9d199754ed9f04cfd8de5a5ea04"
   },
   "_source": "https://github.com/vuejs/vue-resource.git",
-  "_target": "~0.7.0",
-  "_originalSource": "vue-resource"
+  "_target": "^1.0.3",
+  "_originalSource": "vue-resource",
+  "_direct": true
 }

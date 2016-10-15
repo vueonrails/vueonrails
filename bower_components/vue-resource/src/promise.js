@@ -2,39 +2,40 @@
  * Promise adapter.
  */
 
-import { warn } from './util';
 import PromiseLib from './lib/promise';
 
-var PromiseObj = window.Promise || PromiseLib;
+if (typeof Promise === 'undefined') {
+    window.Promise = PromiseLib;
+}
 
-export default function Promise(executor, context) {
+export default function PromiseObj(executor, context) {
 
-    if (executor instanceof PromiseObj) {
+    if (executor instanceof Promise) {
         this.promise = executor;
     } else {
-        this.promise = new PromiseObj(executor.bind(context));
+        this.promise = new Promise(executor.bind(context));
     }
 
     this.context = context;
 }
 
-Promise.all = function (iterable, context) {
-    return new Promise(PromiseObj.all(iterable), context);
+PromiseObj.all = function (iterable, context) {
+    return new PromiseObj(Promise.all(iterable), context);
 };
 
-Promise.resolve = function (value, context) {
-    return new Promise(PromiseObj.resolve(value), context);
+PromiseObj.resolve = function (value, context) {
+    return new PromiseObj(Promise.resolve(value), context);
 };
 
-Promise.reject = function (reason, context) {
-    return new Promise(PromiseObj.reject(reason), context);
+PromiseObj.reject = function (reason, context) {
+    return new PromiseObj(Promise.reject(reason), context);
 };
 
-Promise.race = function (iterable, context) {
-    return new Promise(PromiseObj.race(iterable), context);
+PromiseObj.race = function (iterable, context) {
+    return new PromiseObj(Promise.race(iterable), context);
 };
 
-var p = Promise.prototype;
+var p = PromiseObj.prototype;
 
 p.bind = function (context) {
     this.context = context;
@@ -51,9 +52,7 @@ p.then = function (fulfilled, rejected) {
         rejected = rejected.bind(this.context);
     }
 
-    this.promise = this.promise.then(fulfilled, rejected);
-
-    return this;
+    return new PromiseObj(this.promise.then(fulfilled, rejected), this.context);
 };
 
 p.catch = function (rejected) {
@@ -62,9 +61,7 @@ p.catch = function (rejected) {
         rejected = rejected.bind(this.context);
     }
 
-    this.promise = this.promise.catch(rejected);
-
-    return this;
+    return new PromiseObj(this.promise.catch(rejected), this.context);
 };
 
 p.finally = function (callback) {
@@ -74,36 +71,7 @@ p.finally = function (callback) {
             return value;
         }, function (reason) {
             callback.call(this);
-            return PromiseObj.reject(reason);
+            return Promise.reject(reason);
         }
     );
-};
-
-p.success = function (callback) {
-
-    warn('The `success` method has been deprecated. Use the `then` method instead.');
-
-    return this.then(function (response) {
-        return callback.call(this, response.data, response.status, response) || response;
-    });
-};
-
-p.error = function (callback) {
-
-    warn('The `error` method has been deprecated. Use the `catch` method instead.');
-
-    return this.catch(function (response) {
-        return callback.call(this, response.data, response.status, response) || response;
-    });
-};
-
-p.always = function (callback) {
-
-    warn('The `always` method has been deprecated. Use the `finally` method instead.');
-
-    var cb = function (response) {
-        return callback.call(this, response.data, response.status, response) || response;
-    };
-
-    return this.then(cb, cb);
 };

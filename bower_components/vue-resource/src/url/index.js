@@ -7,7 +7,6 @@ const el = document.createElement('a');
 
 import root from './root';
 import query from './query';
-import legacy from './legacy';
 import template from './template';
 import { each, merge, isArray, isFunction, isObject, isPlainObject, isString } from '../util';
 
@@ -16,12 +15,12 @@ export default function Url(url, params) {
     var self = this || {}, options = url, transform;
 
     if (isString(url)) {
-        options = {url: url, params: params};
+        options = {url, params};
     }
 
     options = merge({}, Url.options, self.$options, options);
 
-    Url.transforms.forEach((handler) => {
+    Url.transforms.forEach(handler => {
         transform = factory(handler, transform, self.$vm);
     });
 
@@ -42,7 +41,7 @@ Url.options = {
  * Url transforms.
  */
 
-Url.transforms = [template, legacy, query, root];
+Url.transforms = [template, query, root];
 
 /**
  * Encodes a Url parameter string.
