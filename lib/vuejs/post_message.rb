@@ -8,6 +8,6 @@ module Log
    ╚████╔╝ ╚██████╔╝███████╗
     ╚═══╝   ╚═════╝ ╚══════╝
 
-  Pull Request ->  https://github.com/ytbryan/vuejs/pulls
+  Send me Pull Request ->  https://github.com/ytbryan/vuejs/pulls
   "
 end

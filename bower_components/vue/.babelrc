@@ -1,7 +1,0 @@
-{
-  "presets": ["es2015", "flow-vue"],
-  "ignore": [
-    "dist/*.js",
-    "packages/**/*.js"
-  ]
-}
