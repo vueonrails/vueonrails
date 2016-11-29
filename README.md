@@ -4,7 +4,7 @@
 
 gem `vuejs` ships with the 1.x & 2.x latest [Vue.js + vue-router + vue-resource + vue-validator + vuex](http://vuejs.org/) and integrate with Rails' asset pipeline. Vue.js is created by Evan You and the vuejs team.
 
-The current 2.x version is `Vue.js` (v2.1.0) + `vue-router` (v2.0.0) + `vue-validator` (v2.1.3) + `vuex` (v2.0.0).
+The current 2.x version is `Vue.js` (v2.1.3) + `vue-router` (v2.0.0) + `vue-validator` (v2.1.3) + `vuex` (v2.0.0).
 > Note that Vue 2.x is not compatible with 1.x. vue-router 2.0 only works with Vue 2.x`
 
 The current 1.x version is `Vue.js` (v1.0.28) + `vue-router` (v0.7.13) + `vue-resource` (v1.0.3)

@@ -2,23 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3b109b8f-e09a-486c-9c38-5dd134fe92b8" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vuejs.iml" afterPath="$PROJECT_DIR$/.idea/vuejs.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/.yarn-integrity" afterPath="$PROJECT_DIR$/node_modules/.yarn-integrity" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/vue/dist/vue.common.js" afterPath="$PROJECT_DIR$/node_modules/vue/dist/vue.common.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/vue/dist/vue.min.js" afterPath="$PROJECT_DIR$/node_modules/vue/dist/vue.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/vue/dist/vue.runtime.common.js" afterPath="$PROJECT_DIR$/node_modules/vue/dist/vue.runtime.common.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/vue/dist/vue.runtime.js" afterPath="$PROJECT_DIR$/node_modules/vue/dist/vue.runtime.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/vue/dist/vue.runtime.min.js" afterPath="$PROJECT_DIR$/node_modules/vue/dist/vue.runtime.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/vue/package.json" afterPath="$PROJECT_DIR$/node_modules/vue/package.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/vue/src/compiler/parser/html-parser.js" afterPath="$PROJECT_DIR$/node_modules/vue/src/compiler/parser/html-parser.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/vue/src/core/index.js" afterPath="$PROJECT_DIR$/node_modules/vue/src/core/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/vue/src/core/instance/lifecycle.js" afterPath="$PROJECT_DIR$/node_modules/vue/src/core/instance/lifecycle.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/vue/src/core/instance/proxy.js" afterPath="$PROJECT_DIR$/node_modules/vue/src/core/instance/proxy.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/vue/src/core/instance/render.js" afterPath="$PROJECT_DIR$/node_modules/vue/src/core/instance/render.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/node_modules/vue/src/core/vdom/patch.js" afterPath="$PROJECT_DIR$/node_modules/vue/src/core/vdom/patch.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/vendor/assets/javascripts/vue2.js" afterPath="$PROJECT_DIR$/vendor/assets/javascripts/vue2.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/yarn.lock" afterPath="$PROJECT_DIR$/yarn.lock" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
     </list>
     <ignored path="vuejs.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -39,12 +23,25 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="vuejs.rb" pinned="false" current-in-tab="true">
+      <file leaf-file-name="vuejs.rb" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/vuejs.rb">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="90">
+                <caret line="6" column="43" selection-start-line="6" selection-start-column="43" selection-end-line="6" selection-end-column="43" />
+                <folding />
+              </first_editor>
+              <second_editor />
             </state>
           </provider>
         </entry>
@@ -68,6 +65,7 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/lib/vuejs/version.rb" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -183,12 +181,12 @@
       <option name="presentableId" value="Default" />
       <updated>1477466522544</updated>
       <workItem from="1477466526077" duration="53000" />
-      <workItem from="1480403920015" duration="88000" />
+      <workItem from="1480403920015" duration="205000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="141000" />
+    <option name="totallyTimeSpent" value="258000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="103" y="31" width="1366" height="764" extended-state="0" />
@@ -248,6 +246,17 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="90">
+            <caret line="6" column="43" selection-start-line="6" selection-start-column="43" selection-end-line="6" selection-end-column="43" />
+            <folding />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
