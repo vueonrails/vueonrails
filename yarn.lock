@@ -13,8 +13,8 @@ vue-validator@^3.0.0-alpha.1:
   resolved "https://registry.yarnpkg.com/vue-validator/-/vue-validator-3.0.0-alpha.1.tgz#38cc6e5677acaefe9b0ee86951ccc0351b29bdb2"
 
 vue@^2.0.5:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/vue/-/vue-2.1.0.tgz#293ba3efaaca846aa6bcbfac45cf8524cc597e3d"
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.1.3.tgz#20161b8684777754fd9823134b38f13c1e197882"
 
 vuex@^2.0.0:
   version "2.0.0"
