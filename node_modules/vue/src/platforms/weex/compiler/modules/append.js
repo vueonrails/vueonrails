@@ -1,22 +1,21 @@
 /* @flow */
 
-import {
-  getAndRemoveAttr
-} from 'compiler/helpers'
-
-function parse (el: ASTElement, options: CompilerOptions) {
-  const staticStyle = getAndRemoveAttr(el, 'append')
-  if (staticStyle === 'tree') {
-    el.atom = true
+function transformNode (el: ASTElement, options: CompilerOptions) {
+  if (el.tag === 'cell' && !el.attrsList.some(item => item.name === 'append')) {
+    el.attrsMap.append = 'tree'
+    el.attrsList.push({ name: 'append', value: 'tree' })
+  }
+  if (el.attrsMap.append === 'tree') {
+    el.appendAsTree = true
   }
 }
 
 function genData (el: ASTElement): string {
-  return el.atom ? `atom:true,` : ''
+  return el.appendAsTree ? `appendAsTree:true,` : ''
 }
 
 export default {
-  staticKeys: ['atom'],
-  parse,
+  staticKeys: ['appendAsTree'],
+  transformNode,
   genData
 }

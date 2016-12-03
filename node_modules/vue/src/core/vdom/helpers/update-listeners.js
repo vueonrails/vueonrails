@@ -9,7 +9,7 @@ export function updateListeners (
   remove: Function,
   vm: Component
 ) {
-  let name, cur, old, fn, event, capture
+  let name, cur, old, fn, event, capture, once
   for (name in on) {
     cur = on[name]
     old = oldOn[name]
@@ -19,10 +19,12 @@ export function updateListeners (
         vm
       )
     } else if (!old) {
-      capture = name.charAt(0) === '!'
-      event = capture ? name.slice(1) : name
+      once = name.charAt(0) === '~' // Prefixed last, checked first
+      event = once ? name.slice(1) : name
+      capture = event.charAt(0) === '!'
+      event = capture ? event.slice(1) : event
       if (Array.isArray(cur)) {
-        add(event, (cur.invoker = arrInvoker(cur)), capture)
+        add(event, (cur.invoker = arrInvoker(cur)), once, capture)
       } else {
         if (!cur.invoker) {
           fn = cur
@@ -30,7 +32,7 @@ export function updateListeners (
           cur.fn = fn
           cur.invoker = fnInvoker(cur)
         }
-        add(event, cur.invoker, capture)
+        add(event, cur.invoker, once, capture)
       }
     } else if (cur !== old) {
       if (Array.isArray(old)) {
@@ -45,8 +47,11 @@ export function updateListeners (
   }
   for (name in oldOn) {
     if (!on[name]) {
-      event = name.charAt(0) === '!' ? name.slice(1) : name
-      remove(event, oldOn[name].invoker)
+      once = name.charAt(0) === '~' // Prefixed last, checked first
+      event = once ? name.slice(1) : name
+      capture = event.charAt(0) === '!'
+      event = capture ? event.slice(1) : event
+      remove(event, oldOn[name].invoker, capture)
     }
   }
 }

@@ -19,11 +19,7 @@ const keyCodes = {
 const modifierCode = {
   stop: '$event.stopPropagation();',
   prevent: '$event.preventDefault();',
-  self: 'if($event.target !== $event.currentTarget)return;'
-}
-
-const isMouseEventRE = /^mouse|^pointer|^(click|dblclick|contextmenu|wheel)$/
-const mouseEventModifierCode = {
+  self: 'if($event.target !== $event.currentTarget)return;',
   ctrl: 'if(!$event.ctrlKey)return;',
   shift: 'if(!$event.shiftKey)return;',
   alt: 'if(!$event.altKey)return;',
@@ -53,12 +49,9 @@ function genHandler (
   } else {
     let code = ''
     const keys = []
-    const isMouseEvnet = isMouseEventRE.test(name)
     for (const key in handler.modifiers) {
       if (modifierCode[key]) {
         code += modifierCode[key]
-      } else if (isMouseEvnet && mouseEventModifierCode[key]) {
-        code += mouseEventModifierCode[key]
       } else {
         keys.push(key)
       }
@@ -74,20 +67,14 @@ function genHandler (
 }
 
 function genKeyFilter (keys: Array<string>): string {
-  const code = keys.length === 1
-    ? normalizeKeyCode(keys[0])
-    : Array.prototype.concat.apply([], keys.map(normalizeKeyCode))
-  if (Array.isArray(code)) {
-    return `if(${code.map(c => `$event.keyCode!==${c}`).join('&&')})return;`
-  } else {
-    return `if($event.keyCode!==${code})return;`
-  }
+  return `if(${keys.map(genFilterCode).join('&&')})return;`
 }
 
-function normalizeKeyCode (key) {
-  return (
-    parseInt(key, 10) || // number keyCode
-    keyCodes[key] || // built-in alias
-    `_k(${JSON.stringify(key)})` // custom alias
-  )
+function genFilterCode (key: number | string): string {
+  const keyVal = parseInt(key, 10)
+  if (keyVal) {
+    return `$event.keyCode!==${keyVal}`
+  }
+  const alias = keyCodes[key]
+  return `_k($event.keyCode,${JSON.stringify(key)}${alias ? ',' + JSON.stringify(alias) : ''})`
 }

@@ -1,6 +1,6 @@
 /* @flow */
 
-import { makeMap, isBuiltInTag, cached } from 'shared/util'
+import { makeMap, isBuiltInTag, cached, no } from 'shared/util'
 
 let isStaticKey
 let isPlatformReservedTag
@@ -21,7 +21,7 @@ const genStaticKeysCached = cached(genStaticKeys)
 export function optimize (root: ?ASTElement, options: CompilerOptions) {
   if (!root) return
   isStaticKey = genStaticKeysCached(options.staticKeys || '')
-  isPlatformReservedTag = options.isReservedTag || (() => false)
+  isPlatformReservedTag = options.isReservedTag || no
   // first pass: mark all non-static nodes.
   markStatic(root)
   // second pass: mark static roots.
@@ -80,8 +80,8 @@ function markStaticRoots (node: ASTNode, isInFor: boolean) {
         markStaticRoots(node.children[i], isInFor || !!node.for)
       }
     }
-    if (node.conditions) {
-      walkThroughConditionsBlocks(node.conditions, isInFor)
+    if (node.ifConditions) {
+      walkThroughConditionsBlocks(node.ifConditions, isInFor)
     }
   }
 }

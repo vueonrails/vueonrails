@@ -1,13 +1,9 @@
 /**
- * vue-router v2.0.0
- * (c) 2016 Evan You
- * @license MIT
- */
-(function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-  typeof define === 'function' && define.amd ? define(factory) :
-  (global.VueRouter = factory());
-}(this, (function () { 'use strict';
+  * vue-router v2.1.1
+  * (c) 2016 Evan You
+  * @license MIT
+  */
+'use strict';
 
 var View = {
   name: 'router-view',
@@ -47,90 +43,28 @@ var View = {
       return h()
     }
 
+    var name = props.name
     var component = inactive
-      ? cache[props.name]
-      : (cache[props.name] = matched.components[props.name])
+      ? cache[name]
+      : (cache[name] = matched.components[name])
 
     if (!inactive) {
-      (data.hook || (data.hook = {})).init = function (vnode) {
-        matched.instances[props.name] = vnode.child
+      var hooks = data.hook || (data.hook = {})
+      hooks.init = function (vnode) {
+        matched.instances[name] = vnode.child
+      }
+      hooks.prepatch = function (oldVnode, vnode) {
+        matched.instances[name] = vnode.child
+      }
+      hooks.destroy = function (vnode) {
+        if (matched.instances[name] === vnode.child) {
+          matched.instances[name] = undefined
+        }
       }
     }
 
     return h(component, data, children)
   }
-}
-
-/*  */
-
-function resolvePath (
-  relative,
-  base,
-  append
-) {
-  if (relative.charAt(0) === '/') {
-    return relative
-  }
-
-  if (relative.charAt(0) === '?' || relative.charAt(0) === '#') {
-    return base + relative
-  }
-
-  var stack = base.split('/')
-
-  // remove trailing segment if:
-  // - not appending
-  // - appending to trailing slash (last segment is empty)
-  if (!append || !stack[stack.length - 1]) {
-    stack.pop()
-  }
-
-  // resolve relative path
-  var segments = relative.replace(/^\//, '').split('/')
-  for (var i = 0; i < segments.length; i++) {
-    var segment = segments[i]
-    if (segment === '.') {
-      continue
-    } else if (segment === '..') {
-      stack.pop()
-    } else {
-      stack.push(segment)
-    }
-  }
-
-  // ensure leading slash
-  if (stack[0] !== '') {
-    stack.unshift('')
-  }
-
-  return stack.join('/')
-}
-
-function parsePath (path) {
-  var hash = ''
-  var query = ''
-
-  var hashIndex = path.indexOf('#')
-  if (hashIndex >= 0) {
-    hash = path.slice(hashIndex)
-    path = path.slice(0, hashIndex)
-  }
-
-  var queryIndex = path.indexOf('?')
-  if (queryIndex >= 0) {
-    query = path.slice(queryIndex + 1)
-    path = path.slice(0, queryIndex)
-  }
-
-  return {
-    path: path,
-    query: query,
-    hash: hash
-  }
-}
-
-function cleanPath (path) {
-  return path.replace(/\/\//g, '/')
 }
 
 /*  */
@@ -163,7 +97,7 @@ function resolveQuery (
     try {
       parsedQuery = parseQuery(query)
     } catch (e) {
-      warn(false, e.message)
+      process.env.NODE_ENV !== 'production' && warn(false, e.message)
       parsedQuery = {}
     }
     for (var key in extraQuery) {
@@ -176,7 +110,7 @@ function resolveQuery (
 }
 
 function parseQuery (query) {
-  var res = Object.create(null)
+  var res = {}
 
   query = query.trim().replace(/^(\?|#|&)/, '')
 
@@ -204,7 +138,7 @@ function parseQuery (query) {
 }
 
 function stringifyQuery (obj) {
-  var res = obj ? Object.keys(obj).sort().map(function (key) {
+  var res = obj ? Object.keys(obj).map(function (key) {
     var val = obj[key]
 
     if (val === undefined) {
@@ -318,7 +252,7 @@ function isObjectEqual (a, b) {
 
 function isIncludedRoute (current, target) {
   return (
-    current.path.indexOf(target.path) === 0 &&
+    current.path.indexOf(target.path.replace(/\/$/, '')) === 0 &&
     (!target.hash || current.hash === target.hash) &&
     queryIncludes(current.query, target.query)
   )
@@ -331,37 +265,6 @@ function queryIncludes (current, target) {
     }
   }
   return true
-}
-
-/*  */
-
-function normalizeLocation (
-  raw,
-  current,
-  append
-) {
-  var next = typeof raw === 'string' ? { path: raw } : raw
-  if (next.name || next._normalized) {
-    return next
-  }
-
-  var parsedPath = parsePath(next.path || '')
-  var basePath = (current && current.path) || '/'
-  var path = parsedPath.path
-    ? resolvePath(parsedPath.path, basePath, append)
-    : (current && current.path) || '/'
-  var query = resolveQuery(parsedPath.query, next.query)
-  var hash = next.hash || parsedPath.hash
-  if (hash && hash.charAt(0) !== '#') {
-    hash = "#" + hash
-  }
-
-  return {
-    _normalized: true,
-    path: path,
-    query: query,
-    hash: hash
-  }
 }
 
 /*  */
@@ -383,34 +286,43 @@ var Link = {
     exact: Boolean,
     append: Boolean,
     replace: Boolean,
-    activeClass: String
+    activeClass: String,
+    event: {
+      type: [String, Array],
+      default: 'click'
+    }
   },
   render: function render (h) {
     var this$1 = this;
 
     var router = this.$router
     var current = this.$route
-    var to = normalizeLocation(this.to, current, this.append)
-    var resolved = router.match(to)
-    var fullPath = resolved.redirectedFrom || resolved.fullPath
-    var base = router.history.base
-    var href = base ? cleanPath(base + fullPath) : fullPath
+    var ref = router.resolve(this.to, current, this.append);
+    var normalizedTo = ref.normalizedTo;
+    var resolved = ref.resolved;
+    var href = ref.href;
     var classes = {}
     var activeClass = this.activeClass || router.options.linkActiveClass || 'router-link-active'
-    var compareTarget = to.path ? createRoute(null, to) : resolved
+    var compareTarget = normalizedTo.path ? createRoute(null, normalizedTo) : resolved
     classes[activeClass] = this.exact
       ? isSameRoute(current, compareTarget)
       : isIncludedRoute(current, compareTarget)
 
-    var on = {
-      click: function (e) {
-        e.preventDefault()
+    var handler = function (e) {
+      if (guardEvent(e)) {
         if (this$1.replace) {
-          router.replace(to)
+          router.replace(normalizedTo)
         } else {
-          router.push(to)
+          router.push(normalizedTo)
         }
       }
+    }
+
+    var on = { click: guardEvent }
+    if (Array.isArray(this.event)) {
+      this.event.forEach(function (e) { on[e] = handler })
+    } else {
+      on[this.event] = handler
     }
 
     var data = {
@@ -424,15 +336,40 @@ var Link = {
       // find the first <a> child and apply listener and href
       var a = findAnchor(this.$slots.default)
       if (a) {
-        var aData = a.data || (a.data = {})
+        // in case the <a> is a static node
+        a.isStatic = false
+        var extend = _Vue.util.extend
+        var aData = a.data = extend({}, a.data)
         aData.on = on
-        var aAttrs = aData.attrs || (aData.attrs = {})
+        var aAttrs = a.data.attrs = extend({}, a.data.attrs)
         aAttrs.href = href
+      } else {
+        // doesn't have <a> child, apply listener to self
+        data.on = on
       }
     }
 
     return h(this.tag, data, this.$slots.default)
   }
+}
+
+function guardEvent (e) {
+  // don't redirect with control keys
+  /* istanbul ignore if */
+  if (e.metaKey || e.ctrlKey || e.shiftKey) { return }
+  // don't redirect when preventDefault called
+  /* istanbul ignore if */
+  if (e.defaultPrevented) { return }
+  // don't redirect on right click
+  /* istanbul ignore if */
+  if (e.button !== 0) { return }
+  // don't redirect if `target="_blank"`
+  /* istanbul ignore if */
+  var target = e.target.getAttribute('target')
+  if (/\b_blank\b/i.test(target)) { return }
+
+  e.preventDefault()
+  return true
 }
 
 function findAnchor (children) {
@@ -450,9 +387,13 @@ function findAnchor (children) {
   }
 }
 
+var _Vue
+
 function install (Vue) {
   if (install.installed) { return }
   install.installed = true
+
+  _Vue = Vue
 
   Object.defineProperty(Vue.prototype, '$router', {
     get: function get () { return this.$root._router }
@@ -474,6 +415,172 @@ function install (Vue) {
 
   Vue.component('router-view', View)
   Vue.component('router-link', Link)
+
+  var strats = Vue.config.optionMergeStrategies
+  // use the same hook merging strategy for route hooks
+  strats.beforeRouteEnter = strats.beforeRouteLeave = strats.created
+}
+
+/*  */
+
+function resolvePath (
+  relative,
+  base,
+  append
+) {
+  if (relative.charAt(0) === '/') {
+    return relative
+  }
+
+  if (relative.charAt(0) === '?' || relative.charAt(0) === '#') {
+    return base + relative
+  }
+
+  var stack = base.split('/')
+
+  // remove trailing segment if:
+  // - not appending
+  // - appending to trailing slash (last segment is empty)
+  if (!append || !stack[stack.length - 1]) {
+    stack.pop()
+  }
+
+  // resolve relative path
+  var segments = relative.replace(/^\//, '').split('/')
+  for (var i = 0; i < segments.length; i++) {
+    var segment = segments[i]
+    if (segment === '.') {
+      continue
+    } else if (segment === '..') {
+      stack.pop()
+    } else {
+      stack.push(segment)
+    }
+  }
+
+  // ensure leading slash
+  if (stack[0] !== '') {
+    stack.unshift('')
+  }
+
+  return stack.join('/')
+}
+
+function parsePath (path) {
+  var hash = ''
+  var query = ''
+
+  var hashIndex = path.indexOf('#')
+  if (hashIndex >= 0) {
+    hash = path.slice(hashIndex)
+    path = path.slice(0, hashIndex)
+  }
+
+  var queryIndex = path.indexOf('?')
+  if (queryIndex >= 0) {
+    query = path.slice(queryIndex + 1)
+    path = path.slice(0, queryIndex)
+  }
+
+  return {
+    path: path,
+    query: query,
+    hash: hash
+  }
+}
+
+function cleanPath (path) {
+  return path.replace(/\/\//g, '/')
+}
+
+/*  */
+
+function createRouteMap (routes) {
+  var pathMap = Object.create(null)
+  var nameMap = Object.create(null)
+
+  routes.forEach(function (route) {
+    addRouteRecord(pathMap, nameMap, route)
+  })
+
+  return {
+    pathMap: pathMap,
+    nameMap: nameMap
+  }
+}
+
+function addRouteRecord (
+  pathMap,
+  nameMap,
+  route,
+  parent,
+  matchAs
+) {
+  var path = route.path;
+  var name = route.name;
+  if (process.env.NODE_ENV !== 'production') {
+    assert(path != null, "\"path\" is required in a route configuration.")
+    assert(
+      typeof route.component !== 'string',
+      "route config \"component\" for path: " + (String(path || name)) + " cannot be a " +
+      "string id. Use an actual component instead."
+    )
+  }
+
+  var record = {
+    path: normalizePath(path, parent),
+    components: route.components || { default: route.component },
+    instances: {},
+    name: name,
+    parent: parent,
+    matchAs: matchAs,
+    redirect: route.redirect,
+    beforeEnter: route.beforeEnter,
+    meta: route.meta || {}
+  }
+
+  if (route.children) {
+    // Warn if route is named and has a default child route.
+    // If users navigate to this route by name, the default child will
+    // not be rendered (GH Issue #629)
+    if (process.env.NODE_ENV !== 'production') {
+      if (route.name && route.children.some(function (child) { return /^\/?$/.test(child.path); })) {
+        warn(false, ("Named Route '" + (route.name) + "' has a default child route.\n          When navigating to this named route (:to=\"{name: '" + (route.name) + "'\"), the default child route will not be rendered.\n          Remove the name from this route and use the name of the default child route for named links instead.")
+        )
+      }
+    }
+    route.children.forEach(function (child) {
+      addRouteRecord(pathMap, nameMap, child, record)
+    })
+  }
+
+  if (route.alias !== undefined) {
+    if (Array.isArray(route.alias)) {
+      route.alias.forEach(function (alias) {
+        addRouteRecord(pathMap, nameMap, { path: alias }, parent, record.path)
+      })
+    } else {
+      addRouteRecord(pathMap, nameMap, { path: route.alias }, parent, record.path)
+    }
+  }
+
+  if (!pathMap[record.path]) {
+    pathMap[record.path] = record
+  }
+  if (name) {
+    if (!nameMap[name]) {
+      nameMap[name] = record
+    } else if (process.env.NODE_ENV !== 'production') {
+      warn(false, ("Duplicate named routes definition: { name: \"" + name + "\", path: \"" + (record.path) + "\" }"))
+    }
+  }
+}
+
+function normalizePath (path, parent) {
+  path = path.replace(/\/$/, '')
+  if (path[0] === '/') { return path }
+  if (parent == null) { return path }
+  return cleanPath(((parent.path) + "/" + path))
 }
 
 var __moduleExports = Array.isArray || function (arr) {
@@ -512,14 +619,16 @@ var PATH_REGEXP = new RegExp([
 /**
  * Parse a string for the raw tokens.
  *
- * @param  {string} str
+ * @param  {string}  str
+ * @param  {Object=} options
  * @return {!Array}
  */
-function parse (str) {
+function parse (str, options) {
   var tokens = []
   var key = 0
   var index = 0
   var path = ''
+  var defaultDelimiter = options && options.delimiter || '/'
   var res
 
   while ((res = PATH_REGEXP.exec(str)) != null) {
@@ -552,8 +661,8 @@ function parse (str) {
     var partial = prefix != null && next != null && next !== prefix
     var repeat = modifier === '+' || modifier === '*'
     var optional = modifier === '?' || modifier === '*'
-    var delimiter = res[2] || '/'
-    var pattern = capture || group || (asterisk ? '.*' : '[^' + delimiter + ']+?')
+    var delimiter = res[2] || defaultDelimiter
+    var pattern = capture || group
 
     tokens.push({
       name: name || key++,
@@ -563,7 +672,7 @@ function parse (str) {
       repeat: repeat,
       partial: partial,
       asterisk: !!asterisk,
-      pattern: escapeGroup(pattern)
+      pattern: pattern ? escapeGroup(pattern) : (asterisk ? '.*' : '[^' + escapeString(delimiter) + ']+?')
     })
   }
 
@@ -584,10 +693,11 @@ function parse (str) {
  * Compile a string to a template function for the path.
  *
  * @param  {string}             str
+ * @param  {Object=}            options
  * @return {!function(Object=, Object=)}
  */
-function compile (str) {
-  return tokensToFunction(parse(str))
+function compile (str, options) {
+  return tokensToFunction(parse(str, options))
 }
 
 /**
@@ -798,34 +908,28 @@ function arrayToRegexp (path, keys, options) {
  * @return {!RegExp}
  */
 function stringToRegexp (path, keys, options) {
-  var tokens = parse(path)
-  var re = tokensToRegExp(tokens, options)
-
-  // Attach keys back to the regexp.
-  for (var i = 0; i < tokens.length; i++) {
-    if (typeof tokens[i] !== 'string') {
-      keys.push(tokens[i])
-    }
-  }
-
-  return attachKeys(re, keys)
+  return tokensToRegExp(parse(path, options), keys, options)
 }
 
 /**
  * Expose a function for taking tokens and returning a RegExp.
  *
- * @param  {!Array}  tokens
- * @param  {Object=} options
+ * @param  {!Array}          tokens
+ * @param  {(Array|Object)=} keys
+ * @param  {Object=}         options
  * @return {!RegExp}
  */
-function tokensToRegExp (tokens, options) {
+function tokensToRegExp (tokens, keys, options) {
+  if (!isarray(keys)) {
+    options = /** @type {!Object} */ (keys || options)
+    keys = []
+  }
+
   options = options || {}
 
   var strict = options.strict
   var end = options.end !== false
   var route = ''
-  var lastToken = tokens[tokens.length - 1]
-  var endsWithSlash = typeof lastToken === 'string' && /\/$/.test(lastToken)
 
   // Iterate over the tokens and create our regexp string.
   for (var i = 0; i < tokens.length; i++) {
@@ -836,6 +940,8 @@ function tokensToRegExp (tokens, options) {
     } else {
       var prefix = escapeString(token.prefix)
       var capture = '(?:' + token.pattern + ')'
+
+      keys.push(token)
 
       if (token.repeat) {
         capture += '(?:' + prefix + capture + ')*'
@@ -855,12 +961,15 @@ function tokensToRegExp (tokens, options) {
     }
   }
 
+  var delimiter = escapeString(options.delimiter || '/')
+  var endsWithDelimiter = route.slice(-delimiter.length) === delimiter
+
   // In non-strict mode we allow a slash at the end of match. If the path to
   // match already ends with a slash, we remove it for consistency. The slash
   // is valid at the end of a path match, not in the middle. This is important
   // in non-ending mode, where "/test/" shouldn't match "/test//route".
   if (!strict) {
-    route = (endsWithSlash ? route.slice(0, -2) : route) + '(?:\\/(?=$))?'
+    route = (endsWithDelimiter ? route.slice(0, -delimiter.length) : route) + '(?:' + delimiter + '(?=$))?'
   }
 
   if (end) {
@@ -868,10 +977,10 @@ function tokensToRegExp (tokens, options) {
   } else {
     // In non-ending mode, we need the capturing groups to match as much as
     // possible by using a positive lookahead to the end or next path segment.
-    route += strict && endsWithSlash ? '' : '(?=\\/|$)'
+    route += strict && endsWithDelimiter ? '' : '(?=' + delimiter + '|$)'
   }
 
-  return new RegExp('^' + route, flags(options))
+  return attachKeys(new RegExp('^' + route, flags(options)), keys)
 }
 
 /**
@@ -887,14 +996,12 @@ function tokensToRegExp (tokens, options) {
  * @return {!RegExp}
  */
 function pathToRegexp (path, keys, options) {
-  keys = keys || []
-
   if (!isarray(keys)) {
-    options = /** @type {!Object} */ (keys)
+    options = /** @type {!Object} */ (keys || options)
     keys = []
-  } else if (!options) {
-    options = {}
   }
+
+  options = options || {}
 
   if (path instanceof RegExp) {
     return regexpToRegexp(path, /** @type {!Array} */ (keys))
@@ -914,79 +1021,101 @@ index.tokensToRegExp = tokensToRegExp_1;
 
 /*  */
 
-function createRouteMap (routes) {
-  var pathMap = Object.create(null)
-  var nameMap = Object.create(null)
+var regexpCache = Object.create(null)
 
-  routes.forEach(function (route) {
-    addRouteRecord(pathMap, nameMap, route)
-  })
+function getRouteRegex (path) {
+  var hit = regexpCache[path]
+  var keys, regexp
 
-  return {
-    pathMap: pathMap,
-    nameMap: nameMap
+  if (hit) {
+    keys = hit.keys
+    regexp = hit.regexp
+  } else {
+    keys = []
+    regexp = index(path, keys)
+    regexpCache[path] = { keys: keys, regexp: regexp }
   }
+
+  return { keys: keys, regexp: regexp }
 }
 
-function addRouteRecord (
-  pathMap,
-  nameMap,
-  route,
-  parent,
-  matchAs
+var regexpCompileCache = Object.create(null)
+
+function fillParams (
+  path,
+  params,
+  routeMsg
 ) {
-  var path = route.path;
-  var name = route.name;
-  assert(path != null, "\"path\" is required in a route configuration.")
-
-  var record = {
-    path: normalizePath(path, parent),
-    components: route.components || { default: route.component },
-    instances: {},
-    name: name,
-    parent: parent,
-    matchAs: matchAs,
-    redirect: route.redirect,
-    beforeEnter: route.beforeEnter,
-    meta: route.meta || {}
-  }
-
-  if (route.children) {
-    // Warn if route is named and has a default child route.
-    // If users navigate to this route by name, the default child will
-    // not be rendered (GH Issue #629)
-    if ("production" !== 'production') {}
-    route.children.forEach(function (child) {
-      addRouteRecord(pathMap, nameMap, child, record)
-    })
-  }
-
-  if (route.alias) {
-    if (Array.isArray(route.alias)) {
-      route.alias.forEach(function (alias) {
-        addRouteRecord(pathMap, nameMap, { path: alias }, parent, record.path)
-      })
-    } else {
-      addRouteRecord(pathMap, nameMap, { path: route.alias }, parent, record.path)
+  try {
+    var filler =
+      regexpCompileCache[path] ||
+      (regexpCompileCache[path] = index.compile(path))
+    return filler(params || {}, { pretty: true })
+  } catch (e) {
+    if (process.env.NODE_ENV !== 'production') {
+      warn(false, ("missing param for " + routeMsg + ": " + (e.message)))
     }
+    return ''
   }
-
-  pathMap[record.path] = record
-  if (name) { nameMap[name] = record }
-}
-
-function normalizePath (path, parent) {
-  path = path.replace(/\/$/, '')
-  if (path[0] === '/') { return path }
-  if (parent == null) { return path }
-  return cleanPath(((parent.path) + "/" + path))
 }
 
 /*  */
 
-var regexpCache = Object.create(null)
+function normalizeLocation (
+  raw,
+  current,
+  append
+) {
+  var next = typeof raw === 'string' ? { path: raw } : raw
+  // named target
+  if (next.name || next._normalized) {
+    return next
+  }
 
-var regexpCompileCache = Object.create(null)
+  // relative params
+  if (!next.path && next.params && current) {
+    next = assign({}, next)
+    next._normalized = true
+    var params = assign(assign({}, current.params), next.params)
+    if (current.name) {
+      next.name = current.name
+      next.params = params
+    } else if (current.matched) {
+      var rawPath = current.matched[current.matched.length - 1].path
+      next.path = fillParams(rawPath, params, ("path " + (current.path)))
+    } else if (process.env.NODE_ENV !== 'production') {
+      warn(false, "relative params navigation requires a current route.")
+    }
+    return next
+  }
+
+  var parsedPath = parsePath(next.path || '')
+  var basePath = (current && current.path) || '/'
+  var path = parsedPath.path
+    ? resolvePath(parsedPath.path, basePath, append || next.append)
+    : (current && current.path) || '/'
+  var query = resolveQuery(parsedPath.query, next.query)
+  var hash = next.hash || parsedPath.hash
+  if (hash && hash.charAt(0) !== '#') {
+    hash = "#" + hash
+  }
+
+  return {
+    _normalized: true,
+    path: path,
+    query: query,
+    hash: hash
+  }
+}
+
+function assign (a, b) {
+  for (var key in b) {
+    a[key] = b[key]
+  }
+  return a
+}
+
+/*  */
 
 function createMatcher (routes) {
   var ref = createRouteMap(routes);
@@ -1003,6 +1132,22 @@ function createMatcher (routes) {
 
     if (name) {
       var record = nameMap[name]
+      var paramNames = getRouteRegex(record.path).keys
+        .filter(function (key) { return !key.optional; })
+        .map(function (key) { return key.name; })
+
+      if (typeof location.params !== 'object') {
+        location.params = {}
+      }
+
+      if (currentRoute && typeof currentRoute.params === 'object') {
+        for (var key in currentRoute.params) {
+          if (!(key in location.params) && paramNames.indexOf(key) > -1) {
+            location.params[key] = currentRoute.params[key]
+          }
+        }
+      }
+
       if (record) {
         location.path = fillParams(record.path, location.params, ("named route \"" + name + "\""))
         return _createRoute(record, location, redirectedFrom)
@@ -1033,7 +1178,9 @@ function createMatcher (routes) {
     }
 
     if (!redirect || typeof redirect !== 'object') {
-      warn(false, ("invalid redirect option: " + (JSON.stringify(redirect))))
+      process.env.NODE_ENV !== 'production' && warn(
+        false, ("invalid redirect option: " + (JSON.stringify(redirect)))
+      )
       return _createRoute(null, location)
     }
 
@@ -1050,7 +1197,9 @@ function createMatcher (routes) {
     if (name) {
       // resolved named direct
       var targetRecord = nameMap[name]
-      assert(targetRecord, ("redirect failed: named route \"" + name + "\" not found."))
+      if (process.env.NODE_ENV !== 'production') {
+        assert(targetRecord, ("redirect failed: named route \"" + name + "\" not found."))
+      }
       return match({
         _normalized: true,
         name: name,
@@ -1117,16 +1266,9 @@ function matchRoute (
   params,
   pathname
 ) {
-  var keys, regexp
-  var hit = regexpCache[path]
-  if (hit) {
-    keys = hit.keys
-    regexp = hit.regexp
-  } else {
-    keys = []
-    regexp = index(path, keys)
-    regexpCache[path] = { keys: keys, regexp: regexp }
-  }
+  var ref = getRouteRegex(path);
+  var regexp = ref.regexp;
+  var keys = ref.keys;
   var m = pathname.match(regexp)
 
   if (!m) {
@@ -1142,22 +1284,6 @@ function matchRoute (
   }
 
   return true
-}
-
-function fillParams (
-  path,
-  params,
-  routeMsg
-) {
-  try {
-    var filler =
-      regexpCompileCache[path] ||
-      (regexpCompileCache[path] = index.compile(path))
-    return filler(params || {}, { pretty: true })
-  } catch (e) {
-    assert(false, ("missing param for " + routeMsg + ": " + (e.message)))
-    return ''
-  }
 }
 
 function resolveRecordPath (path, record) {
@@ -1217,24 +1343,25 @@ History.prototype.listen = function listen (cb) {
   this.cb = cb
 };
 
-History.prototype.transitionTo = function transitionTo (location, cb) {
+History.prototype.transitionTo = function transitionTo (location, onComplete, onAbort) {
     var this$1 = this;
 
   var route = this.router.match(location, this.current)
   this.confirmTransition(route, function () {
     this$1.updateRoute(route)
-    cb && cb(route)
+    onComplete && onComplete(route)
     this$1.ensureURL()
-  })
+  }, onAbort)
 };
 
-History.prototype.confirmTransition = function confirmTransition (route, cb) {
+History.prototype.confirmTransition = function confirmTransition (route, onComplete, onAbort) {
     var this$1 = this;
 
   var current = this.current
+  var abort = function () { onAbort && onAbort() }
   if (isSameRoute(route, current)) {
     this.ensureURL()
-    return
+    return abort()
   }
 
   var ref = resolveQueue(this.current.matched, route.matched);
@@ -1254,14 +1381,18 @@ History.prototype.confirmTransition = function confirmTransition (route, cb) {
 
   this.pending = route
   var iterator = function (hook, next) {
-    if (this$1.pending !== route) { return }
+    if (this$1.pending !== route) {
+      return abort()
+    }
     hook(route, current, function (to) {
       if (to === false) {
         // next(false) -> abort navigation, ensure current URL
-        this$1.ensureURL()
+        this$1.ensureURL(true)
+        abort()
       } else if (typeof to === 'string' || typeof to === 'object') {
         // next('/') or next({ path: '/' }) -> redirect
-        this$1.push(to)
+        (typeof to === 'object' && to.replace) ? this$1.replace(to) : this$1.push(to)
+        abort()
       } else {
         // confirm transition and pass on the value
         next(to)
@@ -1271,12 +1402,18 @@ History.prototype.confirmTransition = function confirmTransition (route, cb) {
 
   runQueue(queue, iterator, function () {
     var postEnterCbs = []
+    var enterGuards = extractEnterGuards(activated, postEnterCbs, function () {
+      return this$1.current === route
+    })
     // wait until async components are resolved before
     // extracting in-component enter guards
-    runQueue(extractEnterGuards(activated, postEnterCbs), iterator, function () {
-      if (this$1.pending === route) {
-        this$1.pending = null
-        cb(route)
+    runQueue(enterGuards, iterator, function () {
+      if (this$1.pending !== route) {
+        return abort()
+      }
+      this$1.pending = null
+      onComplete(route)
+      if (this$1.router.app) {
         this$1.router.app.$nextTick(function () {
           postEnterCbs.forEach(function (cb) { return cb(); })
         })
@@ -1329,33 +1466,89 @@ function resolveQueue (
   }
 }
 
-function extractLeaveGuards (matched) {
-  return flatMapComponents(matched, function (def, instance) {
-    var guard = def && def.beforeRouteLeave
-    if (guard) {
-      return function routeLeaveGuard () {
-        return guard.apply(instance, arguments)
-      }
-    }
-  }).reverse()
+function extractGuard (
+  def,
+  key
+) {
+  if (typeof def !== 'function') {
+    // extend now so that global mixins are applied.
+    def = _Vue.extend(def)
+  }
+  return def.options[key]
 }
 
-function extractEnterGuards (matched, cbs) {
-  return flatMapComponents(matched, function (def, _, match, key) {
-    var guard = def && def.beforeRouteEnter
+function extractLeaveGuards (matched) {
+  return flatten(flatMapComponents(matched, function (def, instance) {
+    var guard = extractGuard(def, 'beforeRouteLeave')
     if (guard) {
-      return function routeEnterGuard (to, from, next) {
-        return guard(to, from, function (cb) {
-          next(cb)
-          if (typeof cb === 'function') {
-            cbs.push(function () {
-              cb(match.instances[key])
-            })
-          }
+      return Array.isArray(guard)
+        ? guard.map(function (guard) { return wrapLeaveGuard(guard, instance); })
+        : wrapLeaveGuard(guard, instance)
+    }
+  }).reverse())
+}
+
+function wrapLeaveGuard (
+  guard,
+  instance
+) {
+  return function routeLeaveGuard () {
+    return guard.apply(instance, arguments)
+  }
+}
+
+function extractEnterGuards (
+  matched,
+  cbs,
+  isValid
+) {
+  return flatten(flatMapComponents(matched, function (def, _, match, key) {
+    var guard = extractGuard(def, 'beforeRouteEnter')
+    if (guard) {
+      return Array.isArray(guard)
+        ? guard.map(function (guard) { return wrapEnterGuard(guard, cbs, match, key, isValid); })
+        : wrapEnterGuard(guard, cbs, match, key, isValid)
+    }
+  }))
+}
+
+function wrapEnterGuard (
+  guard,
+  cbs,
+  match,
+  key,
+  isValid
+) {
+  return function routeEnterGuard (to, from, next) {
+    return guard(to, from, function (cb) {
+      next(cb)
+      if (typeof cb === 'function') {
+        cbs.push(function () {
+          // #750
+          // if a router-view is wrapped with an out-in transition,
+          // the instance may not have been registered at this time.
+          // we will need to poll for registration until current route
+          // is no longer valid.
+          poll(cb, match.instances, key, isValid)
         })
       }
-    }
-  })
+    })
+  }
+}
+
+function poll (
+  cb, // somehow flow cannot infer this is a function
+  instances,
+  key,
+  isValid
+) {
+  if (instances[key]) {
+    cb(instances[key])
+  } else if (isValid()) {
+    setTimeout(function () {
+      poll(cb, instances, key, isValid)
+    }, 16)
+  }
 }
 
 function resolveAsyncComponents (matched) {
@@ -1390,7 +1583,7 @@ function flatMapComponents (
   matched,
   fn
 ) {
-  return Array.prototype.concat.apply([], matched.map(function (m) {
+  return flatten(matched.map(function (m) {
     return Object.keys(m.components).map(function (key) { return fn(
       m.components[key],
       m.instances[key],
@@ -1399,19 +1592,25 @@ function flatMapComponents (
   }))
 }
 
+function flatten (arr) {
+  return Array.prototype.concat.apply([], arr)
+}
+
 /*  */
+
+var positionStore = Object.create(null)
 
 function saveScrollPosition (key) {
   if (!key) { return }
-  window.sessionStorage.setItem(key, JSON.stringify({
+  positionStore[key] = {
     x: window.pageXOffset,
     y: window.pageYOffset
-  }))
+  }
 }
 
 function getScrollPosition (key) {
   if (!key) { return }
-  return JSON.parse(window.sessionStorage.getItem(key))
+  return positionStore[key]
 }
 
 function getElementPosition (el) {
@@ -1449,8 +1648,6 @@ var HTML5History = (function (History) {
     var this$1 = this;
 
     History.call(this, router, base)
-
-    this.transitionTo(getLocation(this.base))
 
     var expectScroll = router.options.scrollBehavior
     window.addEventListener('popstate', function (e) {
@@ -1498,9 +1695,10 @@ var HTML5History = (function (History) {
     })
   };
 
-  HTML5History.prototype.ensureURL = function ensureURL () {
+  HTML5History.prototype.ensureURL = function ensureURL (push) {
     if (getLocation(this.base) !== this.current.fullPath) {
-      replaceState(cleanPath(this.base + this.current.fullPath))
+      var current = cleanPath(this.base + this.current.fullPath)
+      push ? pushState(current) : replaceState(current)
     }
   };
 
@@ -1514,7 +1712,9 @@ var HTML5History = (function (History) {
     if (!behavior) {
       return
     }
-    assert(typeof behavior === 'function', "scrollBehavior must be a function")
+    if (process.env.NODE_ENV !== 'production') {
+      assert(typeof behavior === 'function', "scrollBehavior must be a function")
+    }
 
     // wait until re-render finishes before scrolling
     router.app.$nextTick(function () {
@@ -1578,21 +1778,12 @@ function replaceState (url) {
 
 var HashHistory = (function (History) {
   function HashHistory (router, base, fallback) {
-    var this$1 = this;
-
     History.call(this, router, base)
-
     // check history fallback deeplinking
     if (fallback && this.checkFallback()) {
       return
     }
-
     ensureSlash()
-    this.transitionTo(getHash())
-
-    window.addEventListener('hashchange', function () {
-      this$1.onHashChange()
-    })
   }
 
   if ( History ) HashHistory.__proto__ = History;
@@ -1619,13 +1810,13 @@ var HashHistory = (function (History) {
   };
 
   HashHistory.prototype.push = function push (location) {
-    History.prototype.transitionTo.call(this, location, function (route) {
+    this.transitionTo(location, function (route) {
       pushHash(route.fullPath)
     })
   };
 
   HashHistory.prototype.replace = function replace (location) {
-    History.prototype.transitionTo.call(this, location, function (route) {
+    this.transitionTo(location, function (route) {
       replaceHash(route.fullPath)
     })
   };
@@ -1634,9 +1825,10 @@ var HashHistory = (function (History) {
     window.history.go(n)
   };
 
-  HashHistory.prototype.ensureURL = function ensureURL () {
-    if (getHash() !== this.current.fullPath) {
-      replaceHash(this.current.fullPath)
+  HashHistory.prototype.ensureURL = function ensureURL (push) {
+    var current = this.current.fullPath
+    if (getHash() !== current) {
+      push ? pushHash(current) : replaceHash(current)
     }
   };
 
@@ -1678,7 +1870,7 @@ var AbstractHistory = (function (History) {
   function AbstractHistory (router) {
     History.call(this, router)
     this.stack = []
-    this.index = 0
+    this.index = -1
   }
 
   if ( History ) AbstractHistory.__proto__ = History;
@@ -1688,7 +1880,7 @@ var AbstractHistory = (function (History) {
   AbstractHistory.prototype.push = function push (location) {
     var this$1 = this;
 
-    History.prototype.transitionTo.call(this, location, function (route) {
+    this.transitionTo(location, function (route) {
       this$1.stack = this$1.stack.slice(0, this$1.index + 1).concat(route)
       this$1.index++
     })
@@ -1697,7 +1889,7 @@ var AbstractHistory = (function (History) {
   AbstractHistory.prototype.replace = function replace (location) {
     var this$1 = this;
 
-    History.prototype.transitionTo.call(this, location, function (route) {
+    this.transitionTo(location, function (route) {
       this$1.stack = this$1.stack.slice(0, this$1.index).concat(route)
     })
   };
@@ -1709,10 +1901,10 @@ var AbstractHistory = (function (History) {
     if (targetIndex < 0 || targetIndex >= this.stack.length) {
       return
     }
-    var location = this.stack[targetIndex]
-    this.confirmTransition(location, function () {
+    var route = this.stack[targetIndex]
+    this.confirmTransition(route, function () {
       this$1.index = targetIndex
-      this$1.updateRoute(location)
+      this$1.updateRoute(route)
     })
   };
 
@@ -1743,6 +1935,20 @@ var VueRouter = function VueRouter (options) {
     mode = 'abstract'
   }
   this.mode = mode
+
+  switch (mode) {
+    case 'history':
+      this.history = new HTML5History(this, options.base)
+      break
+    case 'hash':
+      this.history = new HashHistory(this, options.base, this.fallback)
+      break
+    case 'abstract':
+      this.history = new AbstractHistory(this)
+      break
+    default:
+      process.env.NODE_ENV !== 'production' && assert(false, ("invalid mode: " + mode))
+  }
 };
 
 var prototypeAccessors = { currentRoute: {} };
@@ -1754,7 +1960,7 @@ prototypeAccessors.currentRoute.get = function () {
 VueRouter.prototype.init = function init (app /* Vue component instance */) {
     var this$1 = this;
 
-  assert(
+  process.env.NODE_ENV !== 'production' && assert(
     install.installed,
     "not installed. Make sure to call `Vue.use(VueRouter)` " +
     "before creating root instance."
@@ -1762,25 +1968,20 @@ VueRouter.prototype.init = function init (app /* Vue component instance */) {
 
   this.app = app
 
-  var ref = this;
-    var mode = ref.mode;
-    var options = ref.options;
-    var fallback = ref.fallback;
-  switch (mode) {
-    case 'history':
-      this.history = new HTML5History(this, options.base)
-      break
-    case 'hash':
-      this.history = new HashHistory(this, options.base, fallback)
-      break
-    case 'abstract':
-      this.history = new AbstractHistory(this)
-      break
-    default:
-      assert(false, ("invalid mode: " + mode))
+  var history = this.history
+
+  if (history instanceof HTML5History) {
+    history.transitionTo(getLocation(history.base))
+  } else if (history instanceof HashHistory) {
+    var setupHashListener = function () {
+      window.addEventListener('hashchange', function () {
+        history.onHashChange()
+      })
+    }
+    history.transitionTo(getHash(), setupHashListener, setupHashListener)
   }
 
-  this.history.listen(function (route) {
+  history.listen(function (route) {
     this$1.app._route = route
   })
 };
@@ -1813,18 +2014,43 @@ VueRouter.prototype.forward = function forward () {
   this.go(1)
 };
 
-VueRouter.prototype.getMatchedComponents = function getMatchedComponents () {
-  if (!this.currentRoute) {
+VueRouter.prototype.getMatchedComponents = function getMatchedComponents (to) {
+  var route = to
+    ? this.resolve(to).resolved
+    : this.currentRoute
+  if (!route) {
     return []
   }
-  return [].concat.apply([], this.currentRoute.matched.map(function (m) {
+  return [].concat.apply([], route.matched.map(function (m) {
     return Object.keys(m.components).map(function (key) {
       return m.components[key]
     })
   }))
 };
 
+VueRouter.prototype.resolve = function resolve (
+  to,
+  current,
+  append
+) {
+  var normalizedTo = normalizeLocation(to, current || this.history.current, append)
+  var resolved = this.match(normalizedTo, current)
+  var fullPath = resolved.redirectedFrom || resolved.fullPath
+  var base = this.history.base
+  var href = createHref(base, fullPath, this.mode)
+  return {
+    normalizedTo: normalizedTo,
+    resolved: resolved,
+    href: href
+  }
+};
+
 Object.defineProperties( VueRouter.prototype, prototypeAccessors );
+
+function createHref (base, fullPath, mode) {
+  var path = mode === 'hash' ? '#' + fullPath : fullPath
+  return base ? cleanPath(base + '/' + path) : path
+}
 
 VueRouter.install = install
 
@@ -1832,6 +2058,4 @@ if (inBrowser && window.Vue) {
   window.Vue.use(VueRouter)
 }
 
-return VueRouter;
-
-})));
+module.exports = VueRouter;
