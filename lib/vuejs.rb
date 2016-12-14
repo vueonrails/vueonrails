@@ -2,9 +2,9 @@ require "vuejs/version"
 require "thor"
 
 module Vuejs
-  class Engine < Rails::Engine
+  class Engine < ::Rails::Engine
   end
-  
+
   class Base < Thor
     check_unknown_options!
     package_name 'vuejs'
