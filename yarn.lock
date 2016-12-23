@@ -17,6 +17,6 @@ vue@^2.0.5:
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.1.6.tgz#2fc0024c07479ac6bc7d34a2cd5ef9ca5e90b143"
 
 vuex@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/vuex/-/vuex-2.0.0.tgz#26befa44de220f009e432d1027487bff29571cee"
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/vuex/-/vuex-2.1.1.tgz#78463ee45fae4871c5d05177b4e8cedd9e2cbccc"
 
