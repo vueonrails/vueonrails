@@ -1,3 +1,3 @@
 module Vuejs
-  VERSION = "1.0.34"
+  VERSION = "1.0.36"
 end
