@@ -2058,5 +2058,3 @@ VueRouter.version = 'v2.1.1'
 if (inBrowser && window.Vue) {
   window.Vue.use(VueRouter)
 }
-
-module.exports = VueRouter;
