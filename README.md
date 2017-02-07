@@ -7,6 +7,8 @@ gem `vuejs` ships with the 1.x & 2.x latest [Vue.js + vue-router + vue-resource 
 The current 2.x version is `Vue.js` (v2.1.10) + `vue-router` (v2.1.1) + `vue-validator` (v3.0.0-alpha.2) + `vuex` (v2.1.1).
 > Note that Vue 2.x is not compatible with 1.x. vue-router 2.0 only works with Vue 2.x`
 
+TODO: add the minified version of the files to remove the development mode warning.
+
 #####  Legacy
 The current 1.x version is `Vue.js` (v1.0.28) + `vue-router` (v0.7.13) + `vue-resource` (v1.0.3)
 
