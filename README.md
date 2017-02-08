@@ -13,8 +13,10 @@ The rubygem `vuejs` ships with the following goodies:
 It also ships with the following legacy goodies
 
   - `vue` (v1.0.28)
-  - `vue-resource` (v1.0.3)
+  - `vuex` (v1.0.1)
   - `vue-router` (v0.7.13)
+  - `vue-resource` (v1.0.3)
+  - `vue-validator` (v1.4.4)
 
 # Requirement
 
@@ -42,23 +44,30 @@ For 2.x Vue & vue-router or Vue-validator
 //= require vue-router2
 //= require vue-validator2
 //= require vue-validator3
-//= require vuex
+//= require vuex2
 //= require axios
 
 ```
 
 ## Note1
+```
+Sprockets::FileNotFound: couldn't find file 'vue-validator' with type 'application/javascript'
+```
 vue-validator has been changed to vue-validator2
-and vue-validator3.
+and vue-validator3. Use `//= require vue-validator2` or `//= require vue-validator3` instead.
+
+Also changed are vuex to vuex2 `//= require vuex2`
+
 
 ## Note2
-Try to use vue.min to remove the warning statement from console.
-
 ```
   You are running Vue in development mode.
   Make sure to turn on production mode when deploying for production.
   See more tips at https://vuejs.org/guide/deployment.html
 ```
+
+Try to use `//= require vue2.min` to remove the warning statement from console.
+
 
 For 1.x
 
@@ -69,6 +78,7 @@ For 1.x
 //= require vue
 //= require vue-router
 //= require vue-resource
+//= require vuex
 //= require_tree .
 ```
 
