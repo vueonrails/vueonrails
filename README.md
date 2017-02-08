@@ -16,9 +16,6 @@ It also ships with the following legacy goodies
   - `vue-resource` (v1.0.3)
   - `vue-router` (v0.7.13)
 
-
-> Note that Vue 2.x is not compatible with 1.x. vue-router 2.0 only works with Vue 2.x`
-
 # Requirement
 
 ## Installation
@@ -55,7 +52,7 @@ vue-validator has been changed to vue-validator2
 and vue-validator3.
 
 # [Note](#note2)
-Try to use vue.min to remove the warning statement from 
+Try to use vue.min to remove the warning statement from
 
 For 1.x
 
