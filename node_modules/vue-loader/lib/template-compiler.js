@@ -7,7 +7,8 @@ var hotReloadAPIPath = normalize.dep('vue-hot-reload-api')
 
 // vue compiler module for using transforming `<tag>:<attribute>` to `require`
 var defaultTransformToRequire = {
-  img: 'src'
+  img: 'src',
+  image: 'xlink:href'
 }
 var transformToRequire = defaultTransformToRequire
 var defaultCompileOptions = {
@@ -65,7 +66,7 @@ module.exports = function (html) {
   if (compiled.errors.length) {
     var self = this
     compiled.errors.forEach(function (err) {
-      self.emitError('template syntax error ' + err)
+      self.emitError('\n  Vue template syntax error:\n\n  ' + err + '\n')
     })
     code = 'module.exports={render:function(){},staticRenderFns:[]}'
   } else {

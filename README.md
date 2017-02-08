@@ -1,14 +1,23 @@
 # Vuejs Gem
 
-> Reactive Components for Modern Web Interfaces
+> Reactive Components for Modern Web Interfaces by Evan You and Vuejs team
 
-gem `vuejs` ships with the 1.x & 2.x latest [Vue.js + vue-router + vue-resource + vue-validator + vuex](http://vuejs.org/) and integrate with Rails' asset pipeline. Vue.js is created by Evan You and the vuejs team.
+The rubygem `vuejs` ships with the following goodies:
 
-The current 2.x version is `Vue.js` (v2.1.10) + `vue-router` (v2.1.1) + `vue-validator` (v3.0.0-alpha.2) + `vuex` (v2.1.1).
+  - `vue` (v2.1.10)
+  - `vuex` (v2.1.3)
+  - `vue-router` (v2.1.3)
+  - `vue-validator2` (v2.1.7) + `vue-validator3` (v3.0.0-alpha.2)
+  - `axios` (v0.15.3)
+
+It also ships with the following legacy goodies
+
+  - `vue` (v1.0.28)
+  - `vue-resource` (v1.0.3)
+  - `vue-router` (v0.7.13)
+
+
 > Note that Vue 2.x is not compatible with 1.x. vue-router 2.0 only works with Vue 2.x`
-
-#####  Legacy
-The current 1.x version is `Vue.js` (v1.0.28) + `vue-router` (v0.7.13) + `vue-resource` (v1.0.3)
 
 # Requirement
 
@@ -34,12 +43,19 @@ For 2.x Vue & vue-router or Vue-validator
 ```
 //= require vue2
 //= require vue-router2
-//= require vue-validator
+//= require vue-validator2
+//= require vue-validator3
 //= require vuex
+//= require axios
 
 ```
 
+# [Note](#note1)
+vue-validator has been changed to vue-validator2
+and vue-validator3.
 
+# [Note](#note2)
+Try to use vue.min to remove the warning statement from 
 
 For 1.x
 
