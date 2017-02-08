@@ -52,7 +52,13 @@ vue-validator has been changed to vue-validator2
 and vue-validator3.
 
 ## Note2
-Try to use vue.min to remove the warning statement from
+Try to use vue.min to remove the warning statement from console.
+
+```
+  You are running Vue in development mode.
+  Make sure to turn on production mode when deploying for production.
+  See more tips at https://vuejs.org/guide/deployment.html
+```
 
 For 1.x
 
