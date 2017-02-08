@@ -47,11 +47,11 @@ For 2.x Vue & vue-router or Vue-validator
 
 ```
 
-# [Note](#note1)
+## Note1
 vue-validator has been changed to vue-validator2
 and vue-validator3.
 
-# [Note](#note2)
+## Note2
 Try to use vue.min to remove the warning statement from
 
 For 1.x
