@@ -25,7 +25,7 @@ It also ships with the following legacy goodies
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'vuejs'
+  gem 'vuejs'
 ```
 
 And then execute:
@@ -43,13 +43,12 @@ For 2.x Vue & vue-router or Vue-validator
 //= require vue2
 //= require vue-router2
 //= require vue-validator2
-//= require vue-validator3
 //= require vuex2
 //= require axios
-
 ```
 
 ## Note1
+
 ```
 Sprockets::FileNotFound: couldn't find file 'vue-validator' with type 'application/javascript'
 ```
@@ -76,10 +75,10 @@ For 1.x
 //= require jquery_ujs
 //= require turbolinks
 //= require vue
+//= require vuex
 //= require vue-router
 //= require vue-resource
 //= require vue-validator
-//= require vuex
 //= require_tree .
 ```
 
