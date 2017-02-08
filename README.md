@@ -78,6 +78,7 @@ For 1.x
 //= require vue
 //= require vue-router
 //= require vue-resource
+//= require vue-validator
 //= require vuex
 //= require_tree .
 ```
