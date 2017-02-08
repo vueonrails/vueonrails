@@ -47,7 +47,9 @@ For 2.x Vue & vue-router or Vue-validator
 //= require axios
 ```
 
-## Note1
+# Some Solution
+
+### Sprockets::FileNotFound: couldn't find file 'vue-validator'
 
 ```
 Sprockets::FileNotFound: couldn't find file 'vue-validator' with type 'application/javascript'
@@ -55,10 +57,14 @@ Sprockets::FileNotFound: couldn't find file 'vue-validator' with type 'applicati
 vue-validator has been changed to vue-validator2
 and vue-validator3. Use `//= require vue-validator2` or `//= require vue-validator3` instead.
 
-Also changed are vuex to vuex2 `//= require vuex2`
+
+### Sprockets::FileNotFound: couldn't find file 'vuex'
+
+vuex has been updated to vuex2. Therefore use `//= require vuex2` to resolve the error `Sprockets::FileNotFound: couldn't find file 'vuex'`.
 
 
-## Note2
+###   You are running Vue in development mode.
+
 ```
   You are running Vue in development mode.
   Make sure to turn on production mode when deploying for production.
@@ -101,3 +107,5 @@ The gem is available as open source under the terms of the [MIT License](http://
 ## Contact
 
 📮 Bryan Lim ytbryan@gmail.com
+
+> If you are using vue.js via this rubygem, do let me know so that I can list your project/company on this repo. Thank you! 
