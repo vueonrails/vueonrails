@@ -5,7 +5,7 @@
 The rubygem `vuejs` ships with the following goodies:
 
   - `vue` (v2.1.10)
-  - `vuex` (v2.1.3)
+  - `vuex` (v2.1.1)
   - `vue-router` (v2.1.3)
   - `vue-validator2` (v2.1.7) + `vue-validator3` (v3.0.0-alpha.2)
   - `axios` (v0.15.3)
