@@ -5,8 +5,8 @@
 The rubygem `vuejs` ships with the following goodies:
 
   - `vue` (v2.1.10)
-  - `vuex` (v2.1.3)
-  - `vue-router` (v2.1.3)
+  - `vuex` (v2.1.2)
+  - `vue-router` (v2.2.1)
   - `vue-validator2` (v2.1.7) + `vue-validator3` (v3.0.0-alpha.2)
   - `axios` (v0.15.3)
 
@@ -15,7 +15,7 @@ It also ships with the following legacy goodies
   - `vue` (v1.0.28)
   - `vuex` (v1.0.1)
   - `vue-router` (v0.7.13)
-  - `vue-resource` (v1.0.3)
+  - `vue-resource` (v1.2.0)
   - `vue-validator` (v1.4.4)
 
 # Requirement
@@ -108,4 +108,4 @@ The gem is available as open source under the terms of the [MIT License](http://
 
 📮 Bryan Lim ytbryan@gmail.com
 
-> If you are using vue.js via this rubygem, do let me know so that I can list your project/company on this repo. Thank you! 
+> If you are using vue.js via this rubygem, do let me know so that I can list your project/company on this repo. Thank you!
