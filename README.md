@@ -2,6 +2,8 @@
 
 > Reactive Components for Modern Web Interfaces by Evan You and Vuejs team
 
+TODO: update this to support webpacker. Or make plans to create [webpacker-vue](https://github.com/ytbryan/webpacker-vue)
+
 The rubygem `vuejs` ships with the following goodies:
 
   - `vue` (v2.1.10)
