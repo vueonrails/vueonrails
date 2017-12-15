@@ -14,6 +14,10 @@ module Vuejs
     def info
       puts "version: "
     end
+
+    def move
+      # cp node_modules/vue/dist/vue.min.js app/assets/javascripts/
+    end
   end
 
 

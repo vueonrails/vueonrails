@@ -36,6 +36,40 @@ Or install it yourself as:
 
     $ gem install vuejs
 
+## Vue asset pipeline
+
+rails generate vuejs 
+
+
+## Vue Component generator
+This works with webpacker. 
+
+rails g vue <NAME>
+
+
+## example 
+
+rails g vue index
+
+## at view
+
+<%= "index" %>
+
+This will create:
+    app/javascript/component/component.vue
+
+Here's an example of component.vue
+
+rails g vue <component> --seperated
+rails g vue <component> -s
+
+This will create:
+    app/javascript/component/component.vue
+    app/javascript/component/component.css
+    app/javascript/component/component.js
+
+Read about the importance of seperation of concern here. 
+
 ## Usage
 
 For 2.x Vue & vue-router or Vue-validator
