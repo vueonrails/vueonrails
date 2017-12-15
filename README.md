@@ -2,11 +2,13 @@
 
 > Reactive Components for Modern Web Interfaces by Evan You and Vuejs team
 
+TODO: update this to support webpacker. Or make plans to create [webpacker-vue](https://github.com/ytbryan/webpacker-vue)
+
 The rubygem `vuejs` ships with the following goodies:
 
   - `vue` (v2.1.10)
-  - `vuex` (v2.1.2)
-  - `vue-router` (v2.2.1)
+  - `vuex` (v2.1.1)
+  - `vue-router` (v2.1.3)
   - `vue-validator2` (v2.1.7) + `vue-validator3` (v3.0.0-alpha.2)
   - `axios` (v0.15.3)
 
@@ -36,39 +38,11 @@ Or install it yourself as:
 
     $ gem install vuejs
 
-## Vue asset pipeline
-
-rails generate vuejs 
-
 
 ## Vue Component generator
-This works with webpacker. 
 
 rails g vue <NAME>
 
-
-## example 
-
-rails g vue index
-
-## at view
-
-<%= "index" %>
-
-This will create:
-    app/javascript/component/component.vue
-
-Here's an example of component.vue
-
-rails g vue <component> --seperated
-rails g vue <component> -s
-
-This will create:
-    app/javascript/component/component.vue
-    app/javascript/component/component.css
-    app/javascript/component/component.js
-
-Read about the importance of seperation of concern here. 
 
 ## Usage
 
