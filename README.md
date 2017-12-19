@@ -112,6 +112,10 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/ytbrya
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
 
 
+## Book
+
+Richard LaFranchi and I are writing a book on Vue on rails. If you are interested to be one of the early reviewers of our drafts, please email me. 
+
 ## Contact
 
 📮 Bryan Lim ytbryan@gmail.com
