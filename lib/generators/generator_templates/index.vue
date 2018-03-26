@@ -4,5 +4,5 @@
   </div>
 </template>
 
-<script src="./<%= name %>.js">
-<style src="./<%= name %>.css">
+<script src="./<%= name %>.js"></script>
+<style scoped src="./<%= name %>.css"></style>
