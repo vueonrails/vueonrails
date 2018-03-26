@@ -1,6 +1,6 @@
 # Vuejs Gem
 
-> Reactive Components for Modern Web Interfaces by Evan You and Vuejs team
+> Vue on Rails for your favourite ruby on rails projects
 
 TODO: update this to support webpacker. Or make plans to create [webpacker-vue](https://github.com/ytbryan/webpacker-vue)
 
@@ -39,9 +39,22 @@ Or install it yourself as:
     $ gem install vuejs
 
 
-## Vue Component generator
+## Vue component generator
 
-rails g vue <NAME>
+```
+rails generate vue <NAME> 
+```
+
+
+`vuejs` gem creates vue components with seperation of concern by default. 
+
+To generate a single-file component, please use `--single` option. eg. `rails g vue component_name --single`
+
+## Vue component destroyer
+
+```
+rails destroy vue <NAME>
+```
 
 
 ## Usage
