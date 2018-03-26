@@ -9,7 +9,7 @@ class VueGenerator < Rails::Generators::NamedBase
     template_path = "#{__dir__}/../generator_templates"
      
     template "#{template_path}/pack.js", "#{pack_output}.js"    
-    create_vue_component("#{template_path}/index.js", output)
+    create_vue_component("#{template_path}/index", output)
   end
 
 
