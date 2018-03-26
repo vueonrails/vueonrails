@@ -8,16 +8,15 @@ module Vuejs
   class Base < Thor
     check_unknown_options!
     package_name 'vuejs'
-    default_task :info
 
-    desc :info, ""
-    def info
-      puts "version: "
-    end
+    # desc :info, ""
+    # def info
+    #   puts "version: "
+    # end
 
-    def move
-      # cp node_modules/vue/dist/vue.min.js app/assets/javascripts/
-    end
+    # def move
+    #   cp node_modules/vue/dist/vue.min.js app/assets/javascripts/
+    # end
   end
 
 
