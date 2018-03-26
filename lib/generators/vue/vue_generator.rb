@@ -1,21 +1,28 @@
 class VueGenerator < Rails::Generators::NamedBase
   source_root File.expand_path('../../generator_templates', __FILE__)
-  
-  argument :name, :type => :string, :default => "index" 
- 
+  PACKS_PATH = "app/javascript/packs"
+  PARTS_PATH = "app/javascript/parts"
+  argument :name, :type => :string, :default => :index 
+  class_option :single, type: :boolean, default: false
+
   def vue 
-    output = "app/javascript/parts/#{name}/#{name}"    
-    pack_output = "app/javascript/packs/#{name}"
-    template_path = "#{__dir__}/../generator_templates"
-    
-    template "#{template_path}/pack.js", "#{pack_output}.js"    
-    create_vue_component("#{template_path}/index", output)
+    if options[:single] == false
+      create_component_with_seperate_concern_using(name)
+    else 
+      create_single_component_using(name)
+    end
   end
 
   private
-  def create_vue_component(template_dir, output)
-    template "#{template_dir}.vue", "#{output}.vue"    
-    template "#{template_dir}.js", "#{output}.js"
-    copy_file "#{template_dir}.css", "#{output}.css"
+  def create_component_with_seperate_concern_using name
+    template "pack.js", "#{PACKS_PATH}/#{name}.js"      
+    template "index.vue", "#{PARTS_PATH}/#{name}/#{name}.vue"    
+    template "index.js", "#{PARTS_PATH}/#{name}/#{name}.js"
+    copy_file "index.css", "#{PARTS_PATH}/#{name}/#{name}.css"
+  end
+
+  def create_single_component_using name
+    template "pack.js", "#{PACKS_PATH}/#{name}.js" 
+    template "single.vue", "#{PARTS_PATH}/#{name}.vue"    
   end
 end
