@@ -1,7 +1,8 @@
 class VueGenerator < Rails::Generators::NamedBase
-  source_root File.expand_path('../../generator_templates', __FILE__)
   PACKS_PATH = "app/javascript/packs"
   PARTS_PATH = "app/javascript/parts"
+
+  source_root File.expand_path('../../generator_templates', __FILE__)
   argument :name, :type => :string, :default => :index 
   class_option :single, type: :boolean, default: false
 
@@ -9,7 +10,7 @@ class VueGenerator < Rails::Generators::NamedBase
     if options[:single] == false
       create_component_with_seperate_concern_using(name)
     else 
-      create_single_component_using(name)
+      create_single_file_component_using(name)
     end
   end
 
@@ -21,7 +22,7 @@ class VueGenerator < Rails::Generators::NamedBase
     copy_file "index.css", "#{PARTS_PATH}/#{name}/#{name}.css"
   end
 
-  def create_single_component_using name
+  def create_single_file_component_using name
     template "pack.js", "#{PACKS_PATH}/#{name}.js" 
     template "single.vue", "#{PARTS_PATH}/#{name}.vue"    
   end
