@@ -4,14 +4,13 @@ class VueGenerator < Rails::Generators::NamedBase
   argument :name, :type => :string, :default => "index" 
  
   def vue 
-    output = "app/javascript/#{name}/#{name}"    
+    output = "app/javascript/parts/#{name}/#{name}"    
     pack_output = "app/javascript/packs/#{name}"
     template_path = "#{__dir__}/../generator_templates"
     
     template "#{template_path}/pack.js", "#{pack_output}.js"    
     create_vue_component("#{template_path}/index", output)
   end
-
 
   private
   def create_vue_component(template_dir, output)
