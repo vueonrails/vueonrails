@@ -1,0 +1,2 @@
+class VueController < ApplicationController
+end
