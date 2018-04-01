@@ -16,8 +16,8 @@ class VueGenerator < Rails::Generators::NamedBase
       create_component_with_seperate_concern_using(name)
     end
       
-    options[:vuex] ? add_vuex_to_component(name) : nil
-    options[:helpers] ? add_helpers_to_component(name) : nil
+    # options[:vuex] ? add_vuex_to_component(name) : nil
+    # options[:helpers] ? add_helpers_to_component(name) : nil
   end
 
   private
