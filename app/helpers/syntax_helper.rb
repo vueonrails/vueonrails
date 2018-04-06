@@ -7,10 +7,6 @@ module SyntaxHelper
      "<p>#{Vuejs::VERSION}</p>".html_safe
   end
   
-  # def vue_version
-  #   "<p>#{Vue.version}</p>".html_safe
-  # end
-
   def vue_component(*name, **options)
     javascript_pack_tag(*name, **options) + ( stylesheet_pack_tag(*name, **options) if options[:stylesheet] != false )    
   end
