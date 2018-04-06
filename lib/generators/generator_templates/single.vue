@@ -10,6 +10,9 @@ export default {
     return {
       message: "Hello <%= name %>!"
     }
+  }, 
+  methods: {
+    
   }
 }
 </script>
