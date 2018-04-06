@@ -39,15 +39,16 @@ rails destroy vue <NAME>
 ```
 
 ## Vue viewer
-Vue viewer allows you to browse your vue component easily. Simply type in localhost:3000/vue/<name>
+
+Vue viewer allows you to browse your vue component easily. Simply type in http://localhost:3000/vue/<name>
 
 At routes.rb
 
 ```
-mount Vuejs::engine, to: '/vue'
+mount Vuejs::engine, to: 'vue'
 ```
 
-## Vuex support - coming soon 
+## Vuex support - coming soon
 
 ```
 rails g vue <NAME> --vuex
@@ -65,7 +66,7 @@ rails g vue <NAME> --helpers
 
 # Asset Pipeline
 
-The rubygem `vuejs` ships with the following goodies for assets pipeline:
+The ruby gem `vuejs` ships with the following goodies for assets pipeline:
 
 * `vue` (v2.1.10)
 * `vuex` (v2.1.1)
@@ -134,12 +135,12 @@ For 1.x
 
 ## Contributing and License
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/ytbryan/vuejs. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct. 
+Bug reports and pull requests are welcome on GitHub at https://github.com/ytbryan/vuejs. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
 
 ## Book
 
-Richard LaFranchi and I are writing a book on Vue on rails. If you are interested to be one of the early reviewers of our drafts, please email me. 
+Richard LaFranchi and I are writing a book on Vue on rails. If you are interested to be one of the early reviewers of our drafts, please email me.
 
 ## Contact
 
