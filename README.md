@@ -2,7 +2,17 @@
 
 > Vue for your favourite Ruby on Rails projects
 
-# Requirement
+`vuejs` rubygem makes it easy to get started with Vue on Rails project by shipping the following tools. 
+
+- Vuex support 
+- HTML Form helper
+- Turbolinks support
+- Support Webpacker
+- Vue component Scaffold
+- Mapping to Rails resources
+- Auto-loading of Vue component
+- Vue-cli service & Vue-ui compatibility
+- Unit component tests compatible to vue-tests-utils using Jest
 
 ## Installation
 
@@ -16,83 +26,60 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
-
-    $ gem install vuejs
-
 # Webpacker
 
 ## Vue component generator
 
 ```
-rails generate vue <NAME>
+rails generate vue something
 ```
 
-Note: `vuejs` gem creates vue components with seperation of concern by default.
+Note: `vuejs` gem creates vue components as single-file component by default.
 
-To generate a single-file component, please use `--single` option. eg. `rails g vue component_name --single`
+To generate a component with seperation of concern, please use the `--seperate` 
+
+> rails g vue something --seperate
 
 ## Vue component destroyer
 
 ```
-rails destroy vue <NAME>
+rails destroy vue something
 ```
 
-## Vue viewer
+## Vue component viewer
 
-Vue viewer allows you to browse your vue component easily. Simply type in http://localhost:3000/vue/<name>
+Vue-component viewer allows you to browse your individual & independent Vue component easily without its surrounding element outside the scope of the component. Simply visit http://localhost:3000/vue/<name>
 
-At routes.rb
+To mount the endpoint `/vue/<name>`, go to routes.rb and paste this: 
 
 ```
 mount Vuejs::engine, to: 'vue'
+```
+## Turbolinks support 
+```
+rails generate vue something --turbolinks
 ```
 
 ## Vuex support - coming soon
 
 ```
-rails g vue <NAME> --vuex
+rails generate vue something --vuex
 ```
 
 This will add vuex using yarn. And generate a vue component with vuex support
 
-## Add webpacker helpers - coming soon
+## Enable Specific page vue 
 
 ```
-rails g vue <NAME> --helpers
+rails generate vue something --spv
 ```
 
+### Generate unit tests for component - coming soon
+
+```
+rails generate vue something --test
+```
 ---
-
-# Asset Pipeline
-
-The ruby gem `vuejs` ships with the following goodies for assets pipeline:
-
-* `vue` (v2.1.10)
-* `vuex` (v2.1.1)
-* `vue-router` (v2.1.3)
-* `vue-validator2` (v2.1.7) + `vue-validator3` (v3.0.0-alpha.2)
-* `axios` (v0.15.3)
-
-It also ships with the following legacy goodies
-
-* `vue` (v1.0.28)
-* `vuex` (v1.0.1)
-* `vue-router` (v0.7.13)
-* `vue-resource` (v1.2.0)
-* `vue-validator` (v1.4.4)
-
-## Usage
-
-For 2.x Vue & vue-router or Vue-validator
-
-```
-//= require vue2
-//= require vue-router2
-//= require vue-validator2
-//= require vuex2
-//= require axios
-```
 
 # Some Solution for assets pipeline
 
@@ -119,19 +106,14 @@ vuex has been updated to vuex2. Therefore use `//= require vuex2` to resolve the
 
 Try to use `//= require vue2.min` to remove the warning statement from console.
 
-For 1.x
 
-```
-//= require jquery
-//= require jquery_ujs
-//= require turbolinks
-//= require vue
-//= require vuex
-//= require vue-router
-//= require vue-resource
-//= require vue-validator
-//= require_tree .
-```
+## Requirement
+
+- Rails 
+- Webpacker 
+- Vue 
+- Node
+- Webpack
 
 ## Contributing and License
 
@@ -140,10 +122,10 @@ The gem is available as open source under the terms of the [MIT License](http://
 
 ## Book
 
-Richard LaFranchi and I are writing a book on Vue on rails. If you are interested to be one of the early reviewers of our drafts, please email me.
+Richard LaFranchi and I are writing a book on [Vue on rails](http://vueonrails.com). If you are interested to be one of the early reviewers of our drafts, please email me.
 
 ## Contact
 
 📮 Bryan Lim ytbryan@gmail.com
 
-> If you are using vue.js via this rubygem, do let me know so that I can list your project/company on this repo. Thank you!
+> If you are using Vue.js via this rubygem, do let me know so that I can list your project/company on this repo. Thank you!

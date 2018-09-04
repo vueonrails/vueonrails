@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <p>{{ message }}</p>
+    <button @click="click">toggle</button>
   </div>
 </template>
 
