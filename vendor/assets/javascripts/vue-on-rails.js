@@ -1,3 +1,7 @@
+function erb(variable){
+  return document.getElementById("vueonrails-" + variable).getAttribute("data-" + variable)
+}
+
 function isView(pageClassString){
   if(pageClassString == "###") return
   if(pageClassString != "") pageClassString = pageClassString.replace(/#/g , " ");

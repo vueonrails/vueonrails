@@ -1,4 +1,4 @@
-# Vuejs Gem
+# Welcome to Vuejs Gem
 
 > Vue for your favourite Ruby on Rails projects
 
@@ -13,6 +13,7 @@
 - Auto-loading of Vue component
 - Vue-cli service & Vue-ui compatibility
 - Unit component tests compatible to vue-tests-utils using Jest
+- Passing rails variable into Vue component
 
 ## Installation
 
@@ -26,9 +27,18 @@ And then execute:
 
     $ bundle
 
-# Webpacker
+## Get started 
 
-## Vue component generator
+To generate an empty Vue on Rails project with all its dependencies, run Rails with its application template
+
+```
+rails new app -m http://vueonrails.com/vue
+```
+
+To browse the application template, it's here http://vueonrails.com/vue
+
+
+## Generate a new Vue component
 
 ```
 rails generate vue something
@@ -36,17 +46,18 @@ rails generate vue something
 
 Note: `vuejs` gem creates vue components as single-file component by default.
 
-To generate a component with seperation of concern, please use the `--seperate` 
+To generate a component with seperation of concern, please use the option `--seperate`, 
+like `rails g vue something --seperate`
 
 > rails g vue something --seperate
 
-## Vue component destroyer
+## Destroy a Vue component
 
 ```
 rails destroy vue something
 ```
 
-## Vue component viewer
+## View a standalone Vue component
 
 Vue-component viewer allows you to browse your individual & independent Vue component easily without its surrounding element outside the scope of the component. Simply visit http://localhost:3000/vue/<name>
 
@@ -55,30 +66,33 @@ To mount the endpoint `/vue/<name>`, go to routes.rb and paste this:
 ```
 mount Vuejs::engine, to: 'vue'
 ```
-## Turbolinks support 
+
+## Generate a Vue component with Turbolinks support
+
 ```
 rails generate vue something --turbolinks
 ```
 
-## Vuex support - coming soon
+## Generate a Vue component with Vuex support
 
 ```
 rails generate vue something --vuex
 ```
 
-This will add vuex using yarn. And generate a vue component with vuex support
-
-## Enable Specific page vue 
+## Generate a Vue component with Specific Page Vue support 
 
 ```
 rails generate vue something --spv
 ```
 
-### Generate unit tests for component - coming soon
+## Generate a Vue component with unit tests
 
 ```
 rails generate vue something --test
 ```
+
+## Passing Rails Variable into Vue component - coming soon
+
 ---
 
 # Some Solution for assets pipeline

@@ -1,4 +1,4 @@
-### Generator with different options
+# Generating Vue component with different options
 
 `vuejs` gem ships a single generator with different options. 
 In this section, we will take a look at some different options. 

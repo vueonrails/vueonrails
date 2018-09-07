@@ -1,4 +1,4 @@
-### Scaffolding a basic Vue component
+# Scaffolding a basic Vue component
 
 1. `vue g something` 
 

@@ -15,6 +15,15 @@ module SyntaxHelper
      "<p>#{Vuejs::VERSION}</p>".html_safe
   end
   
+  def vue_component(identifier, variable)
+    concat("<div id=\"#{identifier}\" refs=\"#{identifier}\">".html_safe)
+    concat("</div>".html_safe)
+    variable.each {|key, value| 
+      concat("<div id=\"vueonrails-#{key}\" data-#{key}=\"#{value}\">".html_safe)
+      concat("</div>".html_safe)
+    }; nil
+  end
+
   def vue(identifier)
     concat("<div id=\"#{identifier}\" refs=\"#{identifier}\">".html_safe)
     yield

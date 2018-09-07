@@ -1,6 +1,6 @@
-### Installing Vue on Rails project
+# Installing Vue on Rails project
 
-There are three ways to install Vue on Rails as stated from the [Vue on Rails book](vueonrails.com)
+There are three ways to install Vue on Rails as stated in the [Vue on Rails book](vueonrails.com)
 
 1. Install via CDN
 
@@ -29,8 +29,9 @@ There are three ways to install Vue on Rails as stated from the [Vue on Rails bo
 For Rails 5 and below, 
 2. You can insert Vue into Asset pipeline. 
 
-vue install 
-
+```
+rails vue:install 
+```
 For Rails 5 and above, 
 3. You can use webpacker. 
 

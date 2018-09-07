@@ -63,7 +63,7 @@ class VueGenerator < Rails::Generators::NamedBase
   end
 
   def create_component_with_seperate_concern_using name
-    say "Generating a Vue component with seperation of concern"
+    say "Generated a Vue component with seperation of concern"
     @code = "<%= vue \"#{name}\" %>"
     template "packs/pack.js.erb", "#{PACKS_PATH}/#{name}.js"      
     template "packs/index.vue", "#{PARTS_PATH}/#{name}/#{name}.vue"    
@@ -72,7 +72,7 @@ class VueGenerator < Rails::Generators::NamedBase
   end
 
   def create_single_file_component_using name
-    say "Generating a Single File Component"
+    say "Generated a Single File Component"
     @code = "<%= vue \"#{name}\" %>"
     template "packs/pack.js.erb", "#{PACKS_PATH}/#{name}.js" 
     template "sfc/single-file-component.vue", "#{PARTS_PATH}/#{name}.vue"    
