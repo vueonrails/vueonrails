@@ -1,3 +1,7 @@
+# 1.1.0.beta4
+- generate vue component parts with Jest 
+- to run the tests, simply run `yarn test`
+
 # 1.1.0.beta3
 - Passing data from Rails Variable to Vue component
 using vue_component helper and erb() javascript helper.

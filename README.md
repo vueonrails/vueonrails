@@ -2,30 +2,21 @@
 
 > Vue for your favourite Ruby on Rails projects
 
-`vuejs` rubygem makes it easy to get started with Vue on Rails project by shipping the following tools. 
+`vuejs` rubygem makes it easy to get started with Vue on Rails project. To create an empty Vue on Rails project, please run the following command
 
-- Vuex support 
-- HTML Form helper
-- Turbolinks support
-- Support Webpacker
-- Vue component Scaffold
-- Mapping to Rails resources
-- Auto-loading of Vue component
-- Vue-cli service & Vue-ui compatibility
-- Unit component tests compatible to vue-tests-utils using Jest
-- Passing rails variable into Vue component
+```
+rails new app -m http://vueonrails.com/vue
+```
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Add this line to your application's Gemfile and run `bundle`
 
 ```ruby
 gem 'vuejs'
 ```
 
-And then execute:
-
-    $ bundle
+and run `rails vue:setup`
 
 ## Get started 
 
@@ -40,11 +31,13 @@ To browse the application template, it's here http://vueonrails.com/vue
 
 ## Generate a new Vue component
 
+To generate a new vue component is easy. Please run the following command:
+
 ```
 rails generate vue something
 ```
 
-Note: `vuejs` gem creates vue components as single-file component by default.
+> Note: `vuejs` gem creates vue components as single-file component by default.
 
 To generate a component with seperation of concern, please use the option `--seperate`, 
 like `rails g vue something --seperate`
@@ -53,6 +46,7 @@ like `rails g vue something --seperate`
 
 ## Destroy a Vue component
 
+To destroy a vue component is easy. Please run: 
 ```
 rails destroy vue something
 ```
