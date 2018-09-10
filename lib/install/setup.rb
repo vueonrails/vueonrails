@@ -10,18 +10,50 @@ insert_into_file Rails.root.join("config/webpack/environment.js").to_s,
   "environment.config.merge(alias)\n",
   before: "module.exports"
 
-say "Adding vue-autorequest and vue-form-for"
-run "yarn add vue-autorequest vue-form-for"
+  scripts =   <<-eos
+  "scripts": {
+    "test": "jest",
+    "assets:precompile": "yarn install; rails assets:precompile",
+    "webpack-dev-server": "./bin/webpack-dev-server", 
+    "rails server": "rails server",
+    "yarn install": "yarn install"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "vue"
+    ],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/app/javascript/parts/$1"
+    },
+    "transform": {
+      "^.+\\\\\\.js$": "<rootDir>/node_modules/babel-jest",
+      ".*\\\\\\.(vue)$": "<rootDir>/node_modules/vue-jest"
+    },
+    "snapshotSerializers": [
+      "<rootDir>/node_modules/jest-serializer-vue"
+    ]
+  },
+eos
 
-say "Adding Vuex"
-run "yarn add vuex vuex-rails-plugin"
+say "Adding scripts and jest configuration to package.json"
+insert_into_file Rails.root.join("package.json").to_s,
+  "#{scripts}",
+  after: "\"private\": true,\n"
 
-say "Adding tests"
-run "yarn add @vue/test-utils"
+say "Adding test presets to .babelrc"
+babelrc = <<-eos
+  "test": {
+    "presets": [
+      ["env", { "targets": { "node": "current" }}]
+    ]
+  },
+eos
 
-say "Adding turbolinks"
-run "yarn add vue-turbolinks"
+insert_into_file Rails.root.join(".babelrc").to_s,
+  "#{babelrc}",
+  before: "  \"presets\": ["
 
-say "Making Vue on Rails compatible with Vue-ui"
+say "Adding @vue/cli-service to make Vue-ui compatible"
 run "yarn add @vue/cli-service --dev"
-
+  
