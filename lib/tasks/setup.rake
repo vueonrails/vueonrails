@@ -2,7 +2,7 @@ bin_path = ENV["BUNDLE_BIN"] || "./bin"
 namespace :vue do  
   desc "Setup your Vue on Rails project"
   task :setup do
-    template = File.expand_path("../install/alias.rb", __dir__)
+    template = File.expand_path("../install/setup.rb", __dir__)
     base_path =
     if Rails::VERSION::MAJOR >= 5
       "#{RbConfig.ruby} #{bin_path}/rails app:template"

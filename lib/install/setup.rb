@@ -1,7 +1,7 @@
 say "Adding alias.js to config/webpack/alias"
 copy_file "#{__dir__}/config/alias.js", Rails.root.join("config/webpack/alias/alias.js").to_s
 
-say "Adding alias to config/webpack/environment.js"
+say "Adding alias configuration to config/webpack/environment.js"
 insert_into_file Rails.root.join("config/webpack/environment.js").to_s,
   "const alias =  require('./alias/alias')\n",
   after: "require('@rails/webpacker')\n"
@@ -36,7 +36,7 @@ insert_into_file Rails.root.join("config/webpack/environment.js").to_s,
   },
 eos
 
-say "Adding scripts and jest configuration to package.json"
+say "Adding scripts and Jest configuration to package.json"
 insert_into_file Rails.root.join("package.json").to_s,
   "#{scripts}",
   after: "\"private\": true,\n"
