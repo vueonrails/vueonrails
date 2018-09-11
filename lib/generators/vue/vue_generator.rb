@@ -38,8 +38,8 @@ class VueGenerator < Rails::Generators::NamedBase
   def add_tests_to_component name
     template "tests/unit.test.js.erb", "#{TESTS_PATH}/#{name}.test.js"      
 
-    say "adding vue-test-utils and other Jest dependencies"
-    run "yarn add @vue/test-utils jest-serializer-vue vue-jest babel-jest"
+    # say "adding vue-test-utils and other Jest dependencies"
+    # run "yarn add @vue/test-utils jest-serializer-vue vue-jest babel-jest"
   end
   
   def add_helpers_to_component name

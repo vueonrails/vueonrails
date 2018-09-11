@@ -12,11 +12,11 @@ insert_into_file Rails.root.join("config/webpack/environment.js").to_s,
 
   scripts =   <<-eos
   "scripts": {
-    "test": "jest",
-    "assets:precompile": "yarn install; rails assets:precompile",
-    "webpack-dev-server": "./bin/webpack-dev-server", 
     "rails server": "rails server",
-    "yarn install": "yarn install"
+    "webpack-dev-server": "./bin/webpack-dev-server", 
+    "rails assets:precompile": "yarn install; rails assets:precompile",
+    "yarn install": "yarn install",
+    "yarn test": "jest"
   },
   "jest": {
     "moduleFileExtensions": [
@@ -43,17 +43,18 @@ insert_into_file Rails.root.join("package.json").to_s,
 
 say "Adding test presets to .babelrc"
 babelrc = <<-eos
-  "test": {
-    "presets": [
-      ["env", { "targets": { "node": "current" }}]
-    ]
+  "env": {
+    "test": {
+      "presets": [
+        ["env", { "targets": { "node": "current" }}]
+      ]
+    }
   },
 eos
 
 insert_into_file Rails.root.join(".babelrc").to_s,
   "#{babelrc}",
   before: "  \"presets\": ["
-
-say "Adding @vue/cli-service to make Vue-ui compatible"
-run "yarn add @vue/cli-service --dev"
   
+say "Adding @vue/test-utils and other Jest dependencies"
+run "yarn add @vue/test-utils jest jest-serializer-vue vue-jest babel-jest"
