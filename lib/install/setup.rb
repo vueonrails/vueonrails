@@ -56,5 +56,5 @@ insert_into_file Rails.root.join(".babelrc").to_s,
   "#{babelrc}",
   before: "  \"presets\": ["
   
-say "Adding @vue/test-utils and other Jest dependencies"
-run "yarn add @vue/test-utils jest jest-serializer-vue vue-jest babel-jest"
+say "Adding @vue/test-utils and other Jest devdependencies"
+run "yarn add @vue/test-utils jest jest-serializer-vue vue-jest babel-jest --dev"
