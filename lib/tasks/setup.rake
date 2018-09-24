@@ -1,6 +1,6 @@
 bin_path = ENV["BUNDLE_BIN"] || "./bin"
 namespace :vue do  
-  desc "Setup your Vue on Rails project"
+  desc "setup your vue on rails project"
   task :setup do
     template = File.expand_path("../install/setup.rb", __dir__)
     base_path =
@@ -26,7 +26,7 @@ namespace :vue do
     exec "#{base_path} LOCATION=#{template}"
   end
 
-  desc "setup Vue on Rails to be ready for Jest tests"
+  desc "setup vue on rails to be ready for Jest tests"
   task :test do
     template = File.expand_path("../install/test.rb", __dir__)
     base_path =
@@ -39,7 +39,7 @@ namespace :vue do
     exec "#{base_path} LOCATION=#{template}"
   end
 
-  desc "install Vuex and vuex-rails-plugins"
+  desc "install vuex and vuex-rails-plugins"
   task :vuex do
     template = File.expand_path("../install/vuex.rb", __dir__)
     base_path =
@@ -52,7 +52,7 @@ namespace :vue do
     exec "#{base_path} LOCATION=#{template}"
   end
 
-  desc "make this Rails project Vue-ui compatible"
+  desc "make this rails project vue-ui compatible"
   task :ui do
     template = File.expand_path("../install/ui.rb", __dir__)
     base_path =
@@ -63,5 +63,10 @@ namespace :vue do
     end
 
     exec "#{base_path} LOCATION=#{template}"    
+  end
+
+  desc "is this rail project specific-page vue enabled?"
+  task :spv do
+    puts "check if spv is enabled and setup?"
   end
 end

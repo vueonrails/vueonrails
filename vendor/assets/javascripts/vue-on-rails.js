@@ -1,5 +1,7 @@
 function erb(variable){
-  return document.getElementById("vueonrails-" + variable).getAttribute("data-" + variable)
+  var something = document.getElementById("vueonrails-" + variable).getAttribute("data-" + variable)
+  console.log(something)
+  return something
 }
 
 function isView(pageClassString){

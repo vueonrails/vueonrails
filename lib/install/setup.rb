@@ -6,11 +6,22 @@ insert_into_file Rails.root.join("config/webpack/environment.js").to_s,
   "const alias =  require('./alias/alias')\n",
   after: "require('@rails/webpacker')\n"
 
+say "Adding javascript_packs_tag and stylesheet_packs_tag into head"
+insert_into_file Rails.root.join("app/views/layouts/application.html.erb").to_s,
+"   <%= javascript_pack_tag 'application' %>
+    <%= stylesheet_pack_tag 'application' %>\n",
+before: "  </head>\n"
+
+say "Adding hello vue example"
+insert_into_file Rails.root.join("app/javascript/packs/application.js").to_s,
+"\nrequire('./hello_vue')\n",
+after: "console.log('Hello World from Webpacker')\n"
+
 insert_into_file Rails.root.join("config/webpack/environment.js").to_s,
   "environment.config.merge(alias)\n",
   before: "module.exports"
 
-  scripts =   <<-eos
+scripts =   <<-eos
   "scripts": {
     "rails server": "rails server",
     "webpack-dev-server": "./bin/webpack-dev-server", 

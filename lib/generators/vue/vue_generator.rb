@@ -3,7 +3,6 @@ class VueGenerator < Rails::Generators::NamedBase
 
   argument :name, type: :string, default: :index 
   class_option :seperate, type: :boolean, default: false
-  class_option :single, type: :boolean, default: false
   class_option :vuex, type: :boolean, default: false
   class_option :turbolinks, type: :boolean, default: false
   class_option :test, type: :boolean, default: false
@@ -37,14 +36,9 @@ class VueGenerator < Rails::Generators::NamedBase
 
   def add_tests_to_component name
     template "tests/unit.test.js.erb", "#{TESTS_PATH}/#{name}.test.js"      
-
-    # say "adding vue-test-utils and other Jest dependencies"
-    # run "yarn add @vue/test-utils jest-serializer-vue vue-jest babel-jest"
   end
   
   def add_helpers_to_component name
-    run "yarn add vue-form-for"
-
     insert_into_file "#{PACKS_PATH}/#{name}.js" ,
     "import FormFor from 'vue-form-for'",
     after: "import Vue from 'vue'\n"
@@ -52,21 +46,23 @@ class VueGenerator < Rails::Generators::NamedBase
     insert_into_file "#{PACKS_PATH}/#{name}.js",
     "Vue.use(FormFor)\n",
     before: "document.addEventListener"
+
+    run "yarn add vue-form-for"
   end
 
   def add_vuex_to_component name
-    run "yarn add vuex"
     insert_into_file "#{PACKS_PATH}/#{name}.js" ,
-    "import Vuex from 'vuex'",
+    "import Vuex from 'vuex'\n",
     after: "import Vue from 'vue'\n"
 
     insert_into_file "#{PACKS_PATH}/#{name}.js",
     "Vue.use(Vuex)\n",
     before: "document.addEventListener"
+    run "yarn add vuex"
   end
 
   def create_component_with_seperate_concern_using name
-    say "Generated a Vue component with seperation of concern"
+    say "Generated a vue component with seperation of concern"
     @code = "<%= vue \"#{name}\" %>"
     template "packs/pack.js.erb", "#{PACKS_PATH}/#{name}.js"      
     template "packs/index.vue", "#{PARTS_PATH}/#{name}/#{name}.vue"    
@@ -75,21 +71,21 @@ class VueGenerator < Rails::Generators::NamedBase
   end
 
   def create_single_file_component_using name
-    say "Generated a Single File Component"
+    say "Generated a single file component"
     @code = "<%= vue \"#{name}\" %>"
     template "packs/pack.js.erb", "#{PACKS_PATH}/#{name}.js" 
     template "sfc/single-file-component.vue", "#{PARTS_PATH}/#{name}.vue"    
   end
 
   def create_turbolink_single_file_component_using name
-    say "Adding Turbolinks to a Single File Component"
+    say "Adding turbolinks to a single file component"
     @code = "<%= vue \"#{name}\" %>"
     template "turbolinks/turbolinks-pack.js.erb", "#{PACKS_PATH}/#{name}.js"      
     template "sfc/single-file-component.vue", "#{PARTS_PATH}/#{name}.vue"    
   end
 
   def create_turbolink_component_with_seperate_concern_using name
-    say "Adding turbolinks to Vue component with seperate of concerns"
+    say "Adding turbolinks to vue component with seperate of concerns"
     @code = "<%= vue \"#{name}\" %>"
     template "turbolinks/turbolinks-pack.js.erb", "#{PACKS_PATH}/#{name}.js"      
     template "packs/index.vue", "#{PARTS_PATH}/#{name}/#{name}.vue"    

@@ -1,7 +1,7 @@
 require 'open-uri'
 
 namespace :vue do
-  desc "Install vue.js into assets pipeline"
+  desc "install vue.js into assets pipeline"
   task :assets do
     version = "2.5.16"
     source = "https://cdnjs.cloudflare.com/ajax/libs/vue/#{version}/vue.js"
