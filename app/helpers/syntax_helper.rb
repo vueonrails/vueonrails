@@ -1,4 +1,8 @@
 module SyntaxHelper
+  def specific_page_vue
+    return " #{controller_name} #{action_name} "
+  end
+
   def page_specific_vue
     return " #{controller_name} #{action_name} "
   end
@@ -26,11 +30,11 @@ module SyntaxHelper
     end
   end
 
-  def vue(identifier)
-    concat("<div id=\"#{identifier}\" refs=\"#{identifier}\">".html_safe)
-    yield
-    concat("</div>".html_safe)
-  end
+  # def vue(identifier)
+  #   concat("<div id=\"#{identifier}\" refs=\"#{identifier}\">".html_safe)
+  #   yield
+  #   concat("</div>".html_safe)
+  # end
 
-  alias v vue
+  # alias v vue
 end
