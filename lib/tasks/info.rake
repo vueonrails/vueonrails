@@ -1,5 +1,5 @@
 namespace :vue do
-  desc "provide information on Webpacker's environment"
+  desc "Provide information on Webpacker's environment"
   task :info do
     $stdout.puts "Ruby: #{`ruby --version`}"
     $stdout.puts "Rails: #{Rails.version}"
