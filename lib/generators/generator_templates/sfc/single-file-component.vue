@@ -22,8 +22,8 @@ export default {
     }
   },
   methods: {
-    onClick: function(response){
-      alert("clicked")
+    //uncomment the <button  @click="onClick"> at your template
+    onClick: function(){
       console.log("clicked")
     }
   }, 

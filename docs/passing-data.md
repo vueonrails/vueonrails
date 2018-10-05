@@ -1,6 +1,6 @@
 # Passing data for Vue on Rails project
 
-Vuejs gems ships with a two-punch solution to passing Rails variable into a vue component at load time. 
+Vuejs gems ships with a two-punch solution for passing a Rails variable into a vue component at load time. 
 
 1. Make sure that your Vue on Rails project has specific page vue setup. 
 
@@ -17,18 +17,21 @@ Second, use the vue_component and pass in its respective rails variable.
 
 The `vue_component` helper will generate a div for your vue component to mount. It will also generate a div with data-attribute to store the @variable. 
 
+2. 
+
 Last but not least, retrieve the value of your Rails variable in the respective `.vue` file by calling 
 `erb("variable_name")`
 
-```javascript
-<template>
-<div>
-{{ variable }}
-</div>
-</template>
-<script>
-data:{
-  variable: erb("variable")
-}
-</script>
+```html
+  <template>
+    <div>
+      {{variable}}
+    </div>
+  </template>
+  
+  <script>
+    data:{
+      variable: erb("variable")
+    }
+  </script>
 ```

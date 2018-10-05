@@ -10,8 +10,8 @@ import App from '../parts/<%= name %>/<%= name %>.vue'
 <% else -%>
 import App from '../parts/<%= name %>.vue'
 <% end -%>
-Vue.use(TurbolinksAdapter)
 
+Vue.use(TurbolinksAdapter)
 document.addEventListener('turbolinks:load', () => {
   if(isView("###")){
     const <%= name %> = new Vue({
