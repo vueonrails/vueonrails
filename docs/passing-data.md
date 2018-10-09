@@ -1,6 +1,6 @@
 # Passing data for Vue on Rails project
 
-Vuejs gems ships with a two-punch solution for passing a Rails variable into a vue component at load time. 
+`vueonrails` gems ships with a two-punch solution for passing a Rails variable into a vue component at load time. 
 
 1. Make sure that your Vue on Rails project has specific page vue setup. 
 

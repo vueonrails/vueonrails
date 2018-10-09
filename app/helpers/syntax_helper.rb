@@ -11,8 +11,8 @@ module SyntaxHelper
     "<p>#{Rails.version}</p>".html_safe
   end
 
-  def vuejs_gem_version
-     "<p>#{Vuejs::VERSION}</p>".html_safe
+  def vue_on_rails_version
+     "<p>#{VueOnRails::VERSION}</p>".html_safe
   end
   
   def vue_component(identifier, variable=nil)
@@ -25,12 +25,4 @@ module SyntaxHelper
       }; nil
     end
   end
-
-  # def vue(identifier)
-  #   concat("<div id=\"#{identifier}\" refs=\"#{identifier}\">".html_safe)
-  #   yield
-  #   concat("</div>".html_safe)
-  # end
-
-  # alias v vue
 end

@@ -1,17 +1,17 @@
 Description:
-    Vue generator generates a vue component in Single-file component in Rails project. 
+    This generator scaffold a javascript pack and vue component that may be embedded into your Rails view.
 
 Example:
     rails generate vue <component>
 
     This will create:
-        app/javascript/component/component.vue
+        app/javascript/parts/component.vue
+        app/javascript/packs/component.js
 
-    Here's an example of component.vue
-
-    rails g vue <component> --no-single
+    rails g vue <component> --seperate
     
     This will create:
-        app/javascript/component/component.vue
-        app/javascript/component/component.css
-        app/javascript/component/component.js
+        app/javascript/parts/component/component.vue
+        app/javascript/parts/component/component.css
+        app/javascript/parts/component/component.js
+        app/javascript/packs/component.js

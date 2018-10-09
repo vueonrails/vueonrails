@@ -1,6 +1,6 @@
 # Generating Vue component with different options
 
-`vuejs` gem ships a single generator with different options. 
+`vueonrails` gem ships a single generator with different options. 
 In this section, we will take a look at some different options. 
 
 ### Generate a Vue component with Turbolinks support
@@ -36,7 +36,7 @@ Generating a Vue component is as easy as running the following command:
 rails generate vue something
 ```
 
-> By default, `vuejs` gem generates vue component as a single-file component.
+> By default, `vueonrails` gem generates vue component as a single-file component.
 
 To generate a component with seperation of concern, please use the option `--seperate` at the end of your command. For example: 
 
@@ -56,5 +56,5 @@ Vue-component viewer allows you to browse your individual & independent Vue comp
 To mount the endpoint `/vue/<name>`, go to routes.rb and paste this: 
 
 ```
-mount Vuejs::engine, to: 'vue'
+mount VueOnRails::engine, to: 'vue'
 ```

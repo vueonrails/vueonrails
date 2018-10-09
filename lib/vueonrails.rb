@@ -1,13 +1,13 @@
-require "vuejs/version"
+require "vueonrails/version"
 require "thor"
 
-module Vuejs
+module VueOnRails
   class Engine < ::Rails::Engine
-    engine_name 'vuejs'
+    engine_name 'vueonrails'
   end
 
   class Base < Thor
     check_unknown_options!
-    package_name 'vuejs'
+    package_name 'vueonrails'
   end
 end

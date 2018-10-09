@@ -1,17 +1,17 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'vuejs/version'
-require 'vuejs/post_message'
+require 'vueonrails/version'
+require 'vueonrails/post_message'
 
 Gem::Specification.new do |spec|
-  spec.name          = "vuejs"
-  spec.version       = Vuejs::VERSION
+  spec.name          = "vueonrails"
+  spec.version       = VueOnRails::VERSION
   spec.authors       = ["Bryan Lim"]
   spec.email         = ["ytbryan@gmail.com"]
   spec.summary       = %q{Vue on Rails}
-  spec.description   = %q{Latest Vue.js + vue-router + vue-resource + vue-validator + vuex for Rails - ship with Vue 2.x}
-  spec.homepage      = "http://github.com/ytbryan/vuejs"
+  spec.description   = %q{Vue on Rails}
+  spec.homepage      = "http://github.com/ytbryan/vueonrails"
   spec.license       = "MIT"
   spec.post_install_message = Log::MESSAGE
   spec.files         = Dir["{app,config,lib,vendor}/**/*", "LICENSE", "README.md"]

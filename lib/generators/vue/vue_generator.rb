@@ -3,13 +3,12 @@ require 'ostruct'
 class VueGenerator < Rails::Generators::NamedBase
   source_root File.expand_path('../../generator_templates', __FILE__)
 
-  argument :name, type: :string, default: :index 
+  argument :name, type: :string, default: "" 
 
   PACKS_PATH = "app/javascript/packs"
   PARTS_PATH = "app/javascript/parts"
   TESTS_PATH = "app/javascript/tests"
-
-
+  
   OPTIONS = {
     test: {type: :boolean, default: false},
     vuex: {type: :boolean, default: false},
@@ -29,6 +28,8 @@ class VueGenerator < Rails::Generators::NamedBase
   end
 
   def vue
+    return if name.empty?
+    
     if options[:seperate]
       if options[:turbolinks]
         add_to_component("turbolinks-seperate", name)
