@@ -26,6 +26,7 @@ Add this line to your application's Gemfile and run `bundle`
 ```ruby
 gem 'vueonrails'
 ```
+*note*: `vuejs` gem was renamed to `vueonrails`
 
 and run `rails vue:setup`
 
