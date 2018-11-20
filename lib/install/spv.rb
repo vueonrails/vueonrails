@@ -6,7 +6,6 @@ pack_tag = <<-eos
     <%= stylesheet_pack_tag 'application' %>
 eos
 
-# say "Added javascript_packs_tag and stylesheet_packs_tag into head"
 insert_into_file Rails.root.join("app/views/layouts/application.html.erb").to_s,
 pack_tag,
 before: "  </head>\n"
