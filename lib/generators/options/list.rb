@@ -21,7 +21,6 @@ addandremove = <<-eos
     },
 eos
 
-say "Inserted list example into component"
 insert_into_file "#{PARTS_PATH}/#{name}.vue",
 list, after: "<p>{{ message }}</p>\n"
 

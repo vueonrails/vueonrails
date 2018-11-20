@@ -24,12 +24,10 @@ scripts =   <<-eos
   },
 eos
 
-say "Adding scripts and jest configuration to package.json"
 insert_into_file Rails.root.join("package.json").to_s,
   "#{scripts}",
   after: "\"private\": true,\n"
 
-say "Adding test presets to .babelrc"
 babelrc = <<-eos
   "test": {
     "presets": [
@@ -42,5 +40,4 @@ insert_into_file Rails.root.join(".babelrc").to_s,
   "#{babelrc}",
   before: "  \"presets\": ["
 
-say "Adding @vue/test-util and other Jest dependencies"
 run "yarn add jest-serializer-vue vue-jest babel-jest --no-progress --silent"

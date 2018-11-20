@@ -1,6 +1,5 @@
 run "yarn add vue-js-modal"
 
-say "Inserted vue-js-modal example into component"
 insert_into_file "#{PACKS_PATH}/#{name}.js" ,
 "import VModal from 'vue-js-modal'\n",
 after: "import Vue from 'vue'\n"

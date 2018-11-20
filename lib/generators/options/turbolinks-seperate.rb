@@ -1,4 +1,3 @@
-say "Adding turbolinks to a single file component"
 template "turbolinks/turbolinks-pack.js.erb", "#{PACKS_PATH}/#{name}.js"      
 template "packs/index.vue", "#{PARTS_PATH}/#{name}/#{name}.vue"    
 template "packs/index.js", "#{PARTS_PATH}/#{name}/#{name}.js"
