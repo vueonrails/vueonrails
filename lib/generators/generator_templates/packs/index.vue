@@ -5,7 +5,6 @@
 <template>
   <div id="<%= name %>">
     <p>{{ message }}</p>
-    <!-- <button @click="onClick">click this</button> -->
   </div>
 </template>
 

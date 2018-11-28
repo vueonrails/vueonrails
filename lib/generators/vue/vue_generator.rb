@@ -39,13 +39,13 @@ class VueGenerator < Rails::Generators::NamedBase
     else 
       if options[:seperate]
         if options[:turbolinks]
-          add_to_component("turbolinks-seperate", name)
+          add_to_component("turbolinks_seperate", name)
         else 
           add_to_component("seperate", name)
         end
       else 
         if options[:turbolinks]
-          add_to_component("turbolinks-single", name)
+          add_to_component("turbolinks_single", name)
         else 
           add_to_component("single", name)
         end

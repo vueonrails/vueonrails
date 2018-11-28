@@ -6,7 +6,7 @@ TASKS = {
   test: "Check Jest tests ready", 
   vuex: "Check Vuex ready", 
   ui: "Check Vue-ui ready", 
-  spv: "Check Specific-page Vue ready?"
+  specific_page_vue: "Check Specific-page Vue ready?"
 }.freeze
 
 namespace :vue do  
