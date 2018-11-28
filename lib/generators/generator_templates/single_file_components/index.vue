@@ -2,18 +2,18 @@
 <!-- The corresponding pack is app/javascript/packs/<%= name %>.js -->
 <!-- Generate a Single File Component part by running command `rails generate vue something` -->
 
-<template> 
+<template>
   <div id="<%= name %>">
     <p>{{ message }}</p>
-    <!-- <button @click="onClick">click this</button> -->
   </div>
 </template>
 
 <script>
+// import store from '@/store'
 export default {
-  // props: {},
   data: function() {
     return {
+      // sharedState: store.state,
       message: "Hello <%= name %>!"
     };
   },
@@ -23,12 +23,13 @@ export default {
     }
   },
   methods: {
-    //uncomment the <button  @click="onClick"> at your template
+    //Add the button to your template: <button @click="onClick">click this</button>
     onClick: function() {
       console.log("clicked");
     }
   },
   computed: {}
+  // props: {},
   // components: {},
   // mixins: [],
   // directives: {},

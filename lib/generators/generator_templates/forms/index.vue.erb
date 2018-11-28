@@ -11,8 +11,9 @@
 </template>
 
 <script>
+
+// import store from '@/store'
 export default {
-  // props: {},
   data: function() {
     return {
       message: "Hello <%= name %>!"
@@ -24,12 +25,13 @@ export default {
     }
   },
   methods: {
-    //uncomment the <button  @click="onClick"> at your template
+    //Add the button to your .vue template: <button @click="onClick">click this</button>
     onClick: function() {
       console.log("clicked");
     }
   },
   computed: {}
+  // props: {},
   // components: {},
   // mixins: [],
   // directives: {},
