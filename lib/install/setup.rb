@@ -69,6 +69,9 @@ eos
 insert_into_file Rails.root.join(".babelrc").to_s,
 babelrc, before: "  \"presets\": ["
   
+# Insert store.js as a simple store for components' state management
+copy_file "#{__dir__}/../generators/generator_templates/stores/index.js", Rails.root.join("app/javascript/parts/store.js").to_s
+
 # Add Procfile for foreman
 template "#{__dir__}/Procfile",  Rails.root.join("Procfile").to_s
 

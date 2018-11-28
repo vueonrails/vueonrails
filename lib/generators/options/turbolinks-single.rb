@@ -1,2 +1,2 @@
-template "turbolinks/turbolinks-pack.js.erb", "#{PACKS_PATH}/#{name}.js"      
-template "sfc/single-file-component.vue", "#{PARTS_PATH}/#{name}.vue"    
+template "turbolinks/index.js.erb", "#{PACKS_PATH}/#{name}.js"      
+template "single_file_components/index.vue", "#{PARTS_PATH}/#{name}.vue"    

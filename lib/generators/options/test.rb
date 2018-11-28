@@ -1,1 +1,1 @@
-template "tests/unit.test.js.erb", "#{TESTS_PATH}/#{name}.test.js"      
+template "tests/index.js.erb", "#{TESTS_PATH}/#{name}.test.js"      
