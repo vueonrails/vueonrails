@@ -1,10 +1,11 @@
 # Welcome to Vue on Rails 💎
 
-> Vue for your favourite Ruby on Rails projects
+> Vue for your favourite Rails projects
 
-The Vue on Rails gem makes it easy to build your Rails with Vue components.
+The Vue on Rails gem makes it easy to build Vue components on your Rails application.
 
-- 🌎 Internationlization for components parts
+- 💎 Compatible with Rails 6/5/4 and Webpacker
+- 🌎 Internationlization for component parts
 - 🖖 Vue UI ready
 - 🔨 Component generators and scaffolds
 - 📦 Out of the box configuration
@@ -13,9 +14,9 @@ The Vue on Rails gem makes it easy to build your Rails with Vue components.
 - 🎯 Simple state management
 - Ⓧ Easily migrate to Vuex state management
 - 👷🏻️ Asset pipeline helpers
-- 🏎 Kickstart with application template
+- 🏎 Kickstart with Vue on Rails application template
 
-It ships out-of-the-box configuration, component generators and solutions to make life easy for both Vue and Rails.
+It ships out-of-the-box configuration, component generators and other solutions to make life easy for both Vue and Rails.
 
 ---
 
@@ -82,5 +83,4 @@ Richard LaFranchi and I are writing a book [Vue on Rails](http://vueonrails.com)
 
 ## MIT License
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/vueonrails/vueonrails. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+[MIT](LICENSE.md)
