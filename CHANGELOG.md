@@ -9,4 +9,5 @@
 - Jest test configuration
 - Vue UI ready
 - State management with simple store https://vuejs.org/v2/guide/state-management.html
+- Internationalization for components
 - Vue on Rails application template using `rails new app -m http://vueonrails.com/vue`
