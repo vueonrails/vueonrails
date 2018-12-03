@@ -11,7 +11,7 @@ namespace :vue do
     $stdout.puts "Node: #{`node --version`}"
     $stdout.puts "Yarn: #{`yarn --version`}"
     $stdout.puts "\n"
-    $stdout.puts "#{`yarn list @rails/webpacker vue vue-loader vuex vue-template-compiler webpack-dev-server @vue/test-utils babel-jest jest jest-serializer-vue vue-jest`}"
+    $stdout.puts "#{`yarn list @rails/webpacker vueonrails vue-i18n vue vue-loader vuex vue-template-compiler webpack-dev-server @vue/test-utils jest jest-serializer-vue vue-jest babel-jest`}"
     $stdout.puts "\n"
 
     $stdout.puts "Is bin/webpack present?: #{File.exist? 'bin/webpack'}"
