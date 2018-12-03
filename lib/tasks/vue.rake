@@ -14,7 +14,7 @@ namespace :vue do
   TASKS.each do |task_name, description|
     desc description
     task task_name do
-      template = File.expand_path("../install/#{task_name}.rb", __dir__)
+      template = File.expand_path("../installs/#{task_name}.rb", __dir__)
       base_path =
       if Rails::VERSION::MAJOR >= 5
         "#{RbConfig.ruby} #{bin_path}/rails app:template"
