@@ -5,9 +5,9 @@
 import TurbolinksAdapter from 'vue-turbolinks';
 import Vue from 'vue.esm'
 <% if options['seperate'] -%>
-import App from '../parts/<%= name %>/<%= name %>.vue'
+import App from '@/<%= name %>/<%= name %>.vue'
 <% else -%>
-import App from '../parts/<%= name %>.vue'
+import App from '@/<%= name %>.vue'
 <% end -%>
 
 Vue.use(TurbolinksAdapter)

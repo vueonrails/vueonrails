@@ -69,8 +69,9 @@ eos
 insert_into_file Rails.root.join(".babelrc").to_s,
 babelrc, before: "  \"presets\": ["
 
-# Insert locale.js as a default i18n 
+# Insert locale.js as a default i18n and add second locale cn.yml
 copy_file "#{__dir__}/../generators/generator_templates/i18n/index.js", Rails.root.join("app/javascript/locales/locale.js").to_s
+copy_file "#{__dir__}/../generators/generator_templates/i18n/cn.yml", Rails.root.join("config/locales/cn.yml").to_s
 
 # Insert store.js as a simple store for components' state 
 copy_file "#{__dir__}/../generators/generator_templates/stores/index.js", Rails.root.join("app/javascript/parts/store.js").to_s

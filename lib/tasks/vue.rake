@@ -1,6 +1,7 @@
 bin_path = ENV["BUNDLE_BIN"] || "./bin"
 
 TASKS = {
+  locale: "install vue-i18n",
   turbolinks: "Check Vue-turbolinks ready", 
   setup: "Check Vue on Rails ready", 
   test: "Check Jest tests ready", 
