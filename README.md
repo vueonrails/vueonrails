@@ -4,7 +4,7 @@
 
 The Vue on Rails gem makes it easy to build Vue components on your Rails application.
 
-It uses Vue 2.5.17, Ruby 2.5.3, Rails 5.2.1.1, Webpacker 3.5.5, Node 11, Yarn 1.12.1
+It uses Vue 2.5.17, Ruby 2.5.3, Rails 5.2.1.1, Webpacker 3.5.5, Node 11, Yarn 1.12.1.
 
 - 💎 Compatible with Rails 6/5/4 and Webpacker
 - 🌎 Internationalization for component parts
