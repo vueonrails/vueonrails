@@ -1,6 +1,6 @@
 module SyntaxHelper
   def specific_page_vue
-    return " #{controller_name} #{action_name} "
+    " #{controller_name} #{action_name} "
   end
 
   def vue_include_tag(version)
