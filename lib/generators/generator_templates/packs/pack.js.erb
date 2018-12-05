@@ -4,9 +4,9 @@
 
 import Vue from 'vue'
 <% if options['seperate'] -%>
-import App from '../parts/<%= name %>/<%= name %>.vue'
+import App from '@/<%= name %>/<%= name %>.vue'
 <% else -%>
-import App from '../parts/<%= name %>.vue'
+import App from '@/<%= name %>.vue'
 <% end -%>
 
 document.addEventListener('DOMContentLoaded', () => {

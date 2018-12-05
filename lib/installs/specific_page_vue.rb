@@ -1,5 +1,7 @@
 gsub_file Rails.root.join("app/views/layouts/application.html.erb").to_s, 
-/<body>/, '<body class="<%= specific_page_vue %>">'
+/<body>/, '<%= content_tag :body, class: specific_page_vue do %>'
+gsub_file Rails.root.join("app/views/layouts/application.html.erb").to_s, 
+/<\/body>/, '<% end %>'
 
 pack_tag = <<-eos
     <%= javascript_pack_tag 'application' %>

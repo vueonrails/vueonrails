@@ -9,3 +9,5 @@
 /tmp/
 /node_modules/
 /docs/*
+/spec/
+/*.gem

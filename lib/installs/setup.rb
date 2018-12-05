@@ -1,5 +1,5 @@
-say "Adding @vue/test-utils and other Jest devdependencies"
-run "yarn add vueonrails @vue/test-utils jest jest-serializer-vue vue-jest babel-jest --dev"
+say "Adding vueonrails, internationalization, @vue/test-utils and other Jest devdependencies"
+run "yarn add vueonrails vue-i18n @vue/test-utils jest jest-serializer-vue vue-jest babel-jest --dev"
 
 # Copy alias.js into Vue on Rails project
 copy_file "#{__dir__}/config/alias.js", Rails.root.join("config/webpack/alias/alias.js").to_s
@@ -68,8 +68,12 @@ eos
 
 insert_into_file Rails.root.join(".babelrc").to_s,
 babelrc, before: "  \"presets\": ["
-  
-# Insert store.js as a simple store for components' state management
+
+# Insert locale.js as a default i18n and add second locale cn.yml
+copy_file "#{__dir__}/../generators/generator_templates/i18n/index.js", Rails.root.join("app/javascript/locales/locale.js").to_s
+copy_file "#{__dir__}/../generators/generator_templates/i18n/cn.yml", Rails.root.join("config/locales/cn.yml").to_s
+
+# Insert store.js as a simple store for components' state 
 copy_file "#{__dir__}/../generators/generator_templates/stores/index.js", Rails.root.join("app/javascript/parts/store.js").to_s
 
 # Add Procfile for foreman
@@ -77,4 +81,6 @@ template "#{__dir__}/Procfile",  Rails.root.join("Procfile").to_s
 
 # Add specific_page_vue helper to enable Specific-page Vue
 gsub_file Rails.root.join("app/views/layouts/application.html.erb").to_s, 
-/<body>/, '<body class="<%= specific_page_vue %>">'
+/<body>/, '<%= content_tag :body, class: specific_page_vue do %>'
+gsub_file Rails.root.join("app/views/layouts/application.html.erb").to_s, 
+/<\/body>/, '<% end %>'
