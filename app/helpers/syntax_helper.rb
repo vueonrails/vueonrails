@@ -8,11 +8,11 @@ module SyntaxHelper
   end
 
   def rails_version
-    "<p>#{Rails.version}</p>".html_safe
+    content_tag :p, Rails.version
   end
 
   def vue_on_rails_version
-     "<p>#{VueOnRails::VERSION}</p>".html_safe
+    content_tag :p, VueOnRails::VERSION
   end
   
   def vue_component(identifier, variable=nil)
