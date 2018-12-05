@@ -3,8 +3,8 @@ module SyntaxHelper
     " #{controller_name} #{action_name} "
   end
 
-  def vue_include_tag(version)
-    javascript_include_tag "https://cdnjs.cloudflare.com/ajax/libs/vue/#{version}/vue.js" if Rails.env.development?
+  def vue_include_tag
+    javascript_include_tag "https://cdn.jsdelivr.net/npm/vue/dist/vue.js" if Rails.env.development?
   end
 
   def rails_version
