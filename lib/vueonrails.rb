@@ -1,6 +1,6 @@
 require "vueonrails/version"
 
-module VueOnRails
+module Vueonrails
   class Engine < ::Rails::Engine
     engine_name 'vueonrails'
   end

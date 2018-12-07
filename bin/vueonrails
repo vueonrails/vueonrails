@@ -2,4 +2,4 @@
 
 require 'vueonrails'
 
-VueOnRails::Base.start(ARGV)
+Vueonrails::Base.start(ARGV)
