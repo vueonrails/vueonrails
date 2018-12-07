@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.version       = VueOnRails::VERSION
   spec.authors       = ["Bryan Lim"]
   spec.email         = ["ytbryan@gmail.com"]
-  spec.summary       = %q{Vue on Rails http://vueonrails.com}
+  spec.summary       = %q{Vue on Rails https://vueonrails.com}
   spec.description   = %q{Ruby on Rails with the power of Vue components}
-  spec.homepage      = "http://github.com/vueonrails/vueonrails"
+  spec.homepage      = "https://github.com/vueonrails/vueonrails"
   spec.license       = "MIT"
   spec.post_install_message = Log::MESSAGE
   spec.files         = Dir["{app,config,lib}/**/*", "LICENSE.md", "README.md"]
