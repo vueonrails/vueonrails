@@ -14,9 +14,9 @@ It uses Rails 5.x, Vue 2.x, Webpacker 3.x, Ruby 2.x, Node 11.x, Yarn 1.12.x.
 - ✂️ Specific-page Vue
 - 🤡 Jest test ready
 - 🎯 Simple state management
-- Ⓧ Easily migrate to Vuex state management
+- 🗃 Easily migrate to Vuex state management
 - 👷🏻️ Asset pipeline helpers
-- 🏎 Kickstart with our Vue on Rails application template at http://vueonrails.com/vue
+- 🏎 Kickstart with our Vue on Rails application template at https://vueonrails.com/vue
 
 It ships out-of-the-box configuration, component generators and other solutions to make life easy for both Vue and Rails.
 
@@ -27,10 +27,10 @@ It ships out-of-the-box configuration, component generators and other solutions 
 Create an empty Vue on Rails project by running with an application template:
 
 ```
-rails new app -m http://vueonrails.com/vue -d postgresql
+rails new app -m https://vueonrails.com/vue -d postgresql
 ```
 
-To browse the application template, it's here http://vueonrails.com/vue
+To browse the application template, it's here https://vueonrails.com/vue
 
 ## Manual Installation
 
