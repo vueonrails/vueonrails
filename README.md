@@ -49,8 +49,6 @@ gem 'vueonrails'
 
 and run `rails vue:setup` to complete the installation
 
-You can scaffold a Vue component by reading along the [Vue on Rails Handbook](/docs)
-
 ---
 
 ## Getting Help & Contributing Back
