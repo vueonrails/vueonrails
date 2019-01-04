@@ -1,2 +1,2 @@
-class VueController < ApplicationController
+class VueController < ActionController::Base
 end

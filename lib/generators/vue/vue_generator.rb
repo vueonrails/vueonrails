@@ -5,7 +5,7 @@ class VueGenerator < Rails::Generators::NamedBase
   PARTS_PATH = "app/javascript/parts"
   TESTS_PATH = "app/javascript/tests"
 
-  source_root File.expand_path('../../generator_templates', __FILE__)
+  source_root File.expand_path('../../templates', __FILE__)
 
   argument :name, type: :string, default: nil
   
