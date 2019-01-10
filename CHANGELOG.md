@@ -13,3 +13,4 @@
 - Vue on Rails application template using `rails new app -m https://vueonrails.com/vue -d postgresql`
 - Support Babel 7
 - Support webpack 4 & Webpacker 4
+- Support pre-processor like pug

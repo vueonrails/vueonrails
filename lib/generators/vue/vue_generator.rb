@@ -18,6 +18,7 @@ class VueGenerator < Rails::Generators::NamedBase
     table: {type: :boolean, default: false},
     modal: {type: :boolean, default: false},
     click: {type: :boolean, default: false},
+    pug: {type: :boolean, default: false}
   }.freeze
   
   class_option :child, type: :string, default: nil
