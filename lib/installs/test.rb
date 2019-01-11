@@ -28,16 +28,4 @@ insert_into_file Rails.root.join("package.json").to_s,
   "#{scripts}",
   after: "\"private\": true,\n"
 
-babelrc = <<-eos
-  "test": {
-    "presets": [
-      ["env", { "targets": { "node": "current" }}]
-    ]
-  },
-eos
-
-insert_into_file Rails.root.join(".babelrc").to_s,
-  "#{babelrc}",
-  before: "  \"presets\": ["
-
 run "yarn add jest-serializer-vue vue-jest babel-jest --no-progress --silent"
