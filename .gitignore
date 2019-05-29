@@ -11,3 +11,4 @@
 /docs/*
 /spec/
 /*.gem
+/guide/
