@@ -1,3 +1,29 @@
+# Check for the lack of .babelrc or webpacker 4
+def check_version_and_babel
+  #should i check for evidence of webpacker:install?
+  File.exists?(Rails.root.join(".babelrc")) == false \
+  || (Gem.loaded_specs["webpacker"].version < Gem::Version.new('4.x')) == false
+end
+
+begin
+  if(check_version_and_babel)
+      say "You are using Vue on Rails #{Vueonrails::VERSION} and it does not support webpacker 4. 
+    
+    Please use the latest Vue on Rails (1.x) in your Gemfile:
+      gem 'webpacker', '~> 4.x'
+      gem 'vueonrails', '~> 1.x'
+
+    or switch back to webpacker 3:
+      gem 'webpacker', '~> 3.x'
+      gem 'vueonrails', '~> 0.x'", :yellow 
+    exit!
+  end
+rescue Errno::ENOENT => e
+  say "You need webpacker 4."
+  exit!
+end
+
+# the start of the setup script
 say "Adding vueonrails, internationalization, @vue/test-utils and other Jest devdependencies"
 run "yarn add vueonrails vue-i18n @vue/test-utils jest jest-serializer-vue vue-jest babel-jest --dev"
 
@@ -11,6 +37,7 @@ pack_tag =   <<-eos
     <%= javascript_pack_tag 'application' %>
     <%= stylesheet_pack_tag 'application' %>
 eos
+
 insert_into_file Rails.root.join("app/views/layouts/application.html.erb").to_s,
 pack_tag, before: "  </head>\n"
 
