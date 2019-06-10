@@ -4,6 +4,7 @@ class VueGenerator < Rails::Generators::NamedBase
   PACKS_PATH = "app/javascript/packs"
   PARTS_PATH = "app/javascript/parts"
   TESTS_PATH = "app/javascript/tests"
+  SSR_PATH = "app/javascript/ssr"
 
   source_root File.expand_path('../../templates', __FILE__)
 
@@ -21,6 +22,8 @@ class VueGenerator < Rails::Generators::NamedBase
     pug: {type: :boolean, default: false}
   }.freeze
   
+  class_option :ssr, type: :string, default: nil
+
   class_option :child, type: :string, default: nil
   class_option :parent, type: :string, default: nil
   class_option :seperate, type: :boolean, default: false
@@ -33,7 +36,9 @@ class VueGenerator < Rails::Generators::NamedBase
   def vue
     return if name.empty?
 
-    if options[:child] 
+    if options[:ssr]
+      add_ssr_component()
+    elsif options[:child] 
       adding_nested_component(:child, name, nil, options[:child])
     elsif options[:parent]
       adding_nested_component(:parent, name, options[:parent], nil)
@@ -94,6 +99,14 @@ class VueGenerator < Rails::Generators::NamedBase
     template = File.read(File.expand_path("../options/#{example}.rb", __dir__))
     erbtemplate = ERB.new(template).result(namespace.instance_eval { binding })
     eval erbtemplate
+  end
+
+  def add_ssr_component()
+    namespace = OpenStruct.new(SSR_PATH: SSR_PATH)
+    template = File.read(File.expand_path("../options/ssr.rb", __dir__))
+    erbtemplate = ERB.new(template).result(namespace.instance_eval { binding })
+    eval erbtemplate
+
   end
 
   def add_to_component(example, name)

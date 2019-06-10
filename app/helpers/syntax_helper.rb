@@ -1,3 +1,5 @@
+require 'hypernova'
+
 module SyntaxHelper
   def specific_page_vue
     " #{controller_name} #{action_name} "
@@ -24,5 +26,10 @@ module SyntaxHelper
         concat("</div>".html_safe)
       }; nil
     end
+  end
+
+  #server side rendering via hypernova
+  def render_vue(id, name)
+    render_react_component(id, name: name)
   end
 end

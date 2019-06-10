@@ -1,14 +1,15 @@
 bin_path = ENV["BUNDLE_BIN"] || "./bin"
 
 TASKS = {
-  locale: "install vue-i18n",
+  spv: "Install Specific-page Vue",
+  store: "Install simple state management",
+  i18n: "Install i18n dependencies",
+  ssr: "Install server-side rendering using hypernova",
+  setup: "Setup and install Vue on Rails dependencies", 
+  test: "Install Jest tests", 
+  ui: "Check if Vue-ui is installed", 
+  vuex: "Check if Vuex is installed", 
   turbolinks: "Check Vue-turbolinks ready", 
-  setup: "Check Vue on Rails ready", 
-  test: "Check Jest tests ready", 
-  vuex: "Check Vuex ready", 
-  ui: "Check Vue-ui ready", 
-  specific_page_vue: "Check Specific-page Vue ready?",
-  pug: "install pug dependencies"
 }.freeze
 
 namespace :vue do  

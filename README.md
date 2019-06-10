@@ -1,11 +1,12 @@
-# Welcome to Vue on Rails 💎
+![vue on rails](https://vueonrails.com/assets/img/vueonrails.png)
 
 > Vue for your favorite Rails projects
 
 The Vue on Rails gem makes it easy to build Vue components on your Rails application.
 
-It uses Rails 5.x, Vue 2.x, Webpacker 3.x, Ruby 2.x, Node 11.x, Yarn 1.12.x.
+It uses Rails 5.x, Vue 2.x, Webpacker 4.x, Ruby 2.x, Node 11.x, Yarn 1.12.x.
 
+- ❄️ Server Side Rendering using Hypernova
 - 💎 Compatible with Rails 6/5/4 and Webpacker
 - 🌎 Internationalization for component parts
 - 🖖 Vue UI ready

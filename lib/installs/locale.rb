@@ -1,1 +1,0 @@
-run "yarn add vue-i18n"

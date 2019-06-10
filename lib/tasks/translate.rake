@@ -2,7 +2,7 @@ namespace :vue do
   desc "Translate Rails' locale into Vue's locale"
   task :translate do
     Dir.foreach("config/locales/").each do |locale|
-      next if locale == '.' or locale == '..'
+      next if File.extname(locale).strip.downcase != ".yml"
       config = YAML.load_file("config/locales/#{locale}")
       name = locale.to_s.split('.').first if locale.to_s.split('.') != nil
       if name != nil
