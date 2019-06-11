@@ -27,7 +27,7 @@ module SyntaxHelper
   end
 
   #server side rendering via hypernova
-  def render_vue(id, name)
-    render_react_component(id, name: name)
+  def render_vue_component(id, data = {})
+    render_react_component(id, data)
   end
 end
