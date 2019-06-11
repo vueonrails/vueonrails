@@ -1,5 +1,3 @@
-require 'hypernova'
-
 module SyntaxHelper
   def specific_page_vue
     " #{controller_name} #{action_name} "
