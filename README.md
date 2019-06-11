@@ -16,6 +16,7 @@ It uses Rails 5.x, Vue 2.x, Webpacker 4.x, Ruby 2.x, Node 11.x, Yarn 1.12.x.
 - 🤡 Jest test ready
 - 🎯 Simple state management
 - 🗃 Easily migrate to Vuex state management
+- 🐶 Support pug 
 - 👷🏻️ Asset pipeline helpers
 - 🏎 Kickstart with our Vue on Rails application template at https://vueonrails.com/vue
 
