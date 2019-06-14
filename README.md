@@ -1,24 +1,24 @@
 ![vue on rails](https://vueonrails.com/assets/img/vueonrails.png)
 
-> Vue for your favorite Rails projects
+> Vue for your favorite Rails products
 
-The Vue on Rails gem makes it easy to build Vue components on your Rails application.
+The Vue on Rails gem makes it easy to build Vue components on your Rails products.
 
 It uses Rails 5.x, Vue 2.x, Webpacker 4.x, Ruby 2.x, Node 11.x, Yarn 1.12.x.
 
-- ❄️ Server Side Rendering using Hypernova
-- 💎 Compatible with Rails 6/5/4 and Webpacker
-- 🌎 Internationalization for component parts
 - 🖖 Vue UI ready
-- 🔨 Component generators and scaffolds
-- 📦 Out of the box configuration
-- ✂️ Specific-page Vue
-- 🤡 Jest test ready
-- 🎯 Simple state management
-- 🗃 Easily migrate to Vuex state management
 - 🐶 Support pug 
+- 🤡 Jest test ready
+- ✂️ Specific-page Vue
 - 👷🏻️ Asset pipeline helpers
-- 🏎 Kickstart with our Vue on Rails application template at https://vueonrails.com/vue
+- 🎯 Simple state management
+- 📦 Out of the box configuration
+- 🔨 Component generators and scaffolds
+- ❄️ Server Side Rendering using Hypernova
+- 🗃 Easily migrate to Vuex state management
+- 🌎 Internationalization for component parts
+- 💎 Compatible with Rails 6/5/4 and Webpacker
+- 🏎 Kickstart with our application template at https://vueonrails.com/vue
 
 It ships out-of-the-box configuration, component generators and other solutions to make life easy for both Vue and Rails.
 
