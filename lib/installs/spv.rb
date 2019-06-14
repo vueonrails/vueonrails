@@ -3,10 +3,17 @@ gsub_file Rails.root.join("app/views/layouts/application.html.erb").to_s,
 gsub_file Rails.root.join("app/views/layouts/application.html.erb").to_s, 
 /<\/body>/, '<% end %>'
 
-pack_tag = <<-eos
-    <%= javascript_pack_tag 'application' %>
-    <%= stylesheet_pack_tag 'application' %>
-eos
+if (Gem.loaded_specs["rails"].version >= Gem::Version.new('6.x'))  # rails 6 has default javascript_pack_tag
+    pack_tag = <<-eos
+        <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    eos
+else # non-rails 6
+    pack_tag = <<-eos
+        <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+        <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    eos
+end
+
 
 insert_into_file Rails.root.join("app/views/layouts/application.html.erb").to_s,
 pack_tag,
