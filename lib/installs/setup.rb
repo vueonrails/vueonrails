@@ -1,12 +1,8 @@
 # Check for the lack of .babelrc or webpacker 4
-
-# puts Gem.loaded_specs["webpacker"].version 
-# puts Gem::Version.new('4.x')
-
 def check_version_and_babel
   #should i check for evidence of webpacker:install?
-  File.exists?(Rails.root.join(".babelrc")) == false \
-  || (Gem.loaded_specs["webpacker"].version >= Gem::Version.new('4.x.x')) == false
+  (File.exists?(Rails.root.join(".babelrc")) == true) \
+  || ((Gem.loaded_specs["webpacker"].version >= Gem::Version.new('4.x')) == false)
 end
 
 begin
@@ -37,7 +33,7 @@ insert_into_file Rails.root.join("config/webpack/environment.js").to_s,
 "const alias =  require('./alias/alias')\n", after: "require('@rails/webpacker')\n"
 
 # Add *_pack_tag into application.html.erb This is essential for specific-page vue setup.
-if if (Gem.loaded_specs["rails"].version >= Gem::Version.new('6.x'))  # rails 6 has default javascript_pack_tag
+if (Gem.loaded_specs["rails"].version >= Gem::Version.new('6.x'))  # rails 6 has default javascript_pack_tag
   pack_tag = <<-eos
       <%= stylesheet_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   eos
